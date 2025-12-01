@@ -1,3 +1,8 @@
+
+<?php
+include("includes/header.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,24 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Adoption System</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href='https://fonts.googleapis.com/css?family=Agdasima' rel='stylesheet'>
 </head>
 <body>
-    <nav>
-        <div class="logo">PetAdopt</div>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Browse Pets</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-        <button class="login-btn">Login</button>
-    </nav>
-
+    
     <section class="main">
         <h1>Find Your Pawfect Friend Today </h1>
         <p>Thousands of loving pets are waiting for a caring home. Browse adorable dogs, cats, and other companions ready to bring happiness into your life.</p>
-        <div class="main-buttons">
+        <div class="main-button">
             <button>Start Adopting Now</button>
         </div>
         <p class="main-tagline">Because every pet deserves love, care, and a family.</p>
@@ -91,7 +85,7 @@
         </div>
     </section>
 
-    <setion class="testimonials">
+    <section class="testimonials">
         <h2>Happy Tails: Adoption Stories</h2>
         <p>Every adoption changes two lives — the pet’s and yours. Here are some heartwarming stories from our community.</p>
         <div class="testimonial-cards">
@@ -110,7 +104,7 @@
                 <p><em>— Prerana, Pokhara</em></p>
             </div>
         </div>
-    </setion>
+    </section>
 
     <section class="fun-fact">
         <p>🐾 Did You Know? Adopting one pet saves two lives — the one you take home and the one who takes its place in the shelter.</p>
@@ -121,12 +115,6 @@
         <p>Welcome to PetAdopt, your trusted partner in finding loving homes for adorable pets. Our mission is to make pet adoption simple, easy, and reliable. Browse our available pets and begin your adoption journey today!</p>
         <p>Together, we make adoption easier, safer, and full of love.</p>
     </section>
-
-    <footer>
-        <p>Address: Kathmandu, Nepal</p>
-        <p>Phone: +977-9800000000</p>
-        <p>Email: contact@petadopt.com</p>
-        <p>&copy; 2025 Pet Adoption System | Academic Project</p>
-    </footer>
+<?php include("includes/footer.php"); ?>
 </body>
 </html>

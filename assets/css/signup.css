@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&display=swap');
+
+html, body {
+    height: 100%;
+    font-family: 'Agdasima', sans-serif;
+}
+body { 
+    display: flex;
+    flex-direction: column;
+    padding-top: 70px;
+    box-sizing: border-box; 
+    background-color: #F5EEC8;
+}
+main {
+    flex: 1;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navigationbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    font-family: 'Agdasima', sans-serif;
+    border: 1px solid #BDDDFC;
+    background-color: #BDDDFC;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.leftsection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 60px;
+    width: 50px;
+}
+
+.Title {
+    font-size: 25px;
+    color: black;
+    font-weight: 700;
+}
+
+.MidSection {
+    display: flex;
+    gap: 25px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.MidSection a {
+    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.MidSection :hover{
+    color: white;
+}
+
+.Login_Button {
+    display: flex;
+    align-items: center;
+}
+
+.Login_Button a {
+    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px 20px;
+    border: 1px solid #88BDF2;
+    background-color: #88BDF2;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.Login_Button a:hover {
+    background-color: #5596D6;
+    color: #ffffff;
+}
+
+main{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.center{
+    background-color: white;
+    border: 2px solid;
+    border-radius: 10px;
+    width: 400px;
+    padding: 20px 50px;
+    text-align: center;
+}
+
+.center h2{
+    padding-top: 0px;
+    font-size: 28px;
+    color: #2b4660;
+    margin-bottom: 20px;
+}
+
+.center label{
+    display: block;
+    text-align: left;
+    font-size: 20px;
+    margin: 10px 0 5px;
+}
+
+.center input[type="name"],
+.center input[type="number"],
+.center input[type="email"],
+.center input[type="password"],
+.center input[type="password1"]{
+    margin-top: 0px;
+    width: 100%;
+    border: 2px solid #88BDF2;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-family: "Agdasima";
+}
+
+.submit{
+    margin-top: 20px;
+    border: none;
+    border-radius: 10px;
+    font-family: "Agdasima";
+    font-size: 25px;
+    font-weight: 900px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    background-color: #88BDF2;
+}
+
+.submit:hover{
+    background-color: #5596D6;
+    color: white;
+}   

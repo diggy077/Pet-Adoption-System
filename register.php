@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("includes/connection.php");
+include("connection.php");
 
 $error_message = "";
 
@@ -9,21 +9,29 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $email = mysqli_real_escape_string($con, $_POST["email"]);
     $phone = mysqli_real_escape_string($con, $_POST["phone"]);
     $password = mysqli_real_escape_string($con, $_POST["password"]);
+    $Cpassword = mysqli_real_escape_string($con, $_POST["Cpassword"]);
     
     $select = "SELECT * FROM users WHERE email = '$email'";
         $select_user = mysqli_query($con, $select);
 
         if (mysqli_num_rows($select_user) > 0) {
             $error_message = "User already exists!";
-        } else {
-            $sql = "INSERT INTO users(full_name,email, password, phone)
+        } 
+        else {
+            if($password==$Cpassword){
+
+                $sql = "INSERT INTO users(full_name,email, password, phone_num)
                     VALUES ('$full_name', '$email', '$password', '$phone')";
             
             if (mysqli_query($con, $sql)) {
-                header("Location: index.php");
+                header("Location: login.php");
                 exit;
             } else {
                 $error_message = "Error occurred while registering.";
+            }
+            }
+            else{
+                $error_message= "Passwords do not match!";
             }
         }
 }
@@ -33,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Pet Adoption System</title>
+    <title>Register | Pet Adoption System</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Agdasima' rel='stylesheet'>
 </head>
@@ -84,6 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     <div class="input-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="Cpassword" name="Cpassword" placeholder="Re-enter your password" required>
                     </div>
                                         
                     <button type="submit" class="login-submit">Register</button>

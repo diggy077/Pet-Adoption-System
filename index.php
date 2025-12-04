@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>PetAdopt</title>
-        <link rel="Stylesheet" href="assets/css/landing.css">
+        <link rel="Stylesheet" href="assets/css/style.css">
     </head>
     <body>
         <header>

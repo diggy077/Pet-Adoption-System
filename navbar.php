@@ -16,97 +16,9 @@ if ($user['role'] == 'superadmin') {
 
 ?>
 <html>
-
 <head>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&display=swap');
-
-        body {
-            display: flex;
-            flex-direction: column;
-            padding-top: 70px;
-            box-sizing: border-box;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .navigationbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            font-family: 'Agdasima', sans-serif;
-            border: 1px solid #BDDDFC;
-            background-color: #BDDDFC;
-            height: 70px;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .leftsection {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .logo {
-            height: 60px;
-            width: 50px;
-        }
-
-        .Title {
-            font-size: 25px;
-            color: black;
-            font-weight: 700;
-        }
-
-        .MidSection {
-            display: flex;
-            gap: 25px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .MidSection a {
-            color: black;
-            font-size: 20px;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .MidSection :hover {
-            color: white;
-        }
-
-        .Login_Button {
-            display: flex;
-            align-items: center;
-        }
-
-        .Login_Button a {
-            color: black;
-            font-size: 20px;
-            font-weight: 700;
-            padding: 5px 20px;
-            border: 1px solid #88BDF2;
-            background-color: #88BDF2;
-            border-radius: 10px;
-            text-decoration: none;
-        }
-
-        .Login_Button a:hover {
-            background-color: #5596D6;
-            color: #ffffff;
-        }
-    </style>
+    <title>Browse Pets | PetAdopt</title>
+    <link rel="stylesheet" href="assets/css/style.css" >
 </head>
 
 <body>

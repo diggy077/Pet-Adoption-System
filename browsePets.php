@@ -25,130 +25,17 @@ $pets_result = mysqli_query($con, $pets_query);
 
 <head>
     <title>Browse Pets| PetAdopt</title>
-    <link rel="stylesheet" href="assets/css/landing.css" >
+    <link rel="stylesheet" href="assets/css/style.css" >
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        html,
-        body {
-            height: auto;
-        }
-
-        body {
-            font-family: 'Agdasima', sans-serif;
-            background-color: #ffffff;
-            color: #333;
-            padding-top: 70px;
-        }
-
-        .browse-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .browse-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #2b4660;
-        }
-
-        .browse-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .browse-header p {
-            font-size: 1.2rem;
-        }
-
-        .pet-grid {
-            width: 1000px;
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            border: 2px solid #2b4660;
-            border-radius: 15px;
-            background-color: #ffffff;
-            padding: 2rem 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .pet-card {
-            margin: 0 0.5rem;
-        }
-
-        .pet-card h2 {
-            margin-bottom: 10px;
-        }
-
-        .pet-card p {
-            font-size: 20px;
-        }
-
-        .adopt-btn {
-            text-decoration: none;
-            background-color: #88BDF2;
-            color: black;
-            border: none;
-            width: auto;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        #deleteModal{
-            display:none;
-            position:fixed;
-            top:0;
-            left:0;
-            width: 100%;
-            height:100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-
-        #deleteModalContent {
-            background: white;
-            padding: 20px;
-            margin: 150px auto;
-            width: 300px;
-            text-align: center;
-            border-radius: 10px;
-            font-size:1.5rem;
-        }
-
-        #deleteModalContent button {
-            padding: 0.5rem 1rem;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #deleteBtn {
-            background-color: red;
-            color: white;
-        }
-
-        #cancelBtn {
-            background-color: #ccc;
-        }
-    </style>
 </head>
 
 <body>
     <div class="browse-container">
+        
         <div class="browse-header">
             <h1>🐾 Browse All Pets</h1>
             <p>Find your perfect companion from out list of adorable pets available for adoption.</p>
+            
             <form method="GET" action="browsePets.php" style="margin-top: 1.0rem;">
                 <label for="category" style="font-size:1.1rem; font-weight:bold; color:#2b4660;">Category:</label>
                 <select name="category" id="category" onchange="this.form.submit()" style="padding: 0.5rem 1rem; border-radius:5px; border:1px solid #2b4660; margin-left:10px; font-size:1rem;">

@@ -3,22 +3,25 @@ session_start();
 include("connection.php");
 include("navbar.php");
 
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
+// if (!isset($_SESSION['id'])) {
+//     header("Location: login.php");
+//     exit();
+// }
+$user=null;
+if(isset($_SESSION['id'])){
+    $user_id = $_SESSION['id'];
+    $query = "SELECT full_name, role FROM users WHERE id=$user_id";
+    $result = mysqli_query($con, $query);
+    $user = mysqli_fetch_assoc($result);
 }
-$user_id = $_SESSION['id'];
-$query = "SELECT full_name, role FROM users WHERE id=$user_id";
-$result = mysqli_query($con, $query);
-$user = mysqli_fetch_assoc($result);
-
-$category_filter = "";
-if (isset($_GET['category']) && !empty($_GET['category'])) {
-    $category = mysqli_real_escape_string($con, $_GET['category']);
-    $category_filter = "AND category = '$category'";
-}
-$pets_query = "SELECT * FROM pets WHERE status= 'available' $category_filter";
-$pets_result = mysqli_query($con, $pets_query);
+    
+    $category_filter = "";
+    if (isset($_GET['category']) && !empty($_GET['category'])) {
+        $category = mysqli_real_escape_string($con, $_GET['category']);
+        $category_filter = "AND category = '$category'";
+    }
+    $pets_query = "SELECT * FROM pets WHERE status= 'available' $category_filter";
+    $pets_result = mysqli_query($con, $pets_query);
 ?>
 
 <html>
@@ -45,6 +48,7 @@ $pets_result = mysqli_query($con, $pets_query);
                     <option value="Rabbit" <?php if (isset($_GET['category']) && $_GET['category'] == 'Rabbit') echo 'selected'; ?>>Rabbit</option>
                 </select>
             </form>
+            <?php if($user): ?>
                 <?php if ($user['role'] == 'admin'): ?>
                     <div style="margin-top: 1rem; text-align:right;">
                         <a href="addPet.php" class="adopt-btn">
@@ -52,6 +56,7 @@ $pets_result = mysqli_query($con, $pets_query);
                         </a>
                     </div>
                 <?php endif; ?>
+            <?php endif; ?>
         </div>
 
         <div class="pet-grid">
@@ -63,10 +68,12 @@ $pets_result = mysqli_query($con, $pets_query);
                         <p><?php echo htmlspecialchars($pet['breed']); ?></p>
                         <p><?php echo $pet['age']; ?> months old</p>
                         <a href="pet-details.php?id=<?php echo $pet['id']; ?>" class="adopt-btn"> View Details</a>
+                        <?php if($user): ?>
                         <?php if ($user['role'] == 'admin'): ?>
                             <button class="adopt-btn" style="background-color:red; color:white; margin-top:5px;" onclick="openDeleteModal(<?php echo $pet['id']; ?>)">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
+                        <?php endif; ?>
                         <?php endif; ?>
                     </div>
                 <?php endwhile; ?>

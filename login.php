@@ -75,11 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         <div class="error-message">
                             <?php echo $error_message; ?>
                         </div>
-                    <?php } ?>
+                    <?php } ?><br>
 
-                    <div class="forgot-password">
+                    <!-- <div class="forgot-password">
                         <a href="forgot-password.php">Forgot Password?</a>
-                    </div>
+                    </div> -->
                     
                     <button type="submit" class="login-submit">Login</button>
                 </form>

@@ -49,10 +49,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .container {
             width: 50vw;
             margin: 1.5rem auto;
+            margin-top: 5.5rem;
             padding: 1rem 2rem;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow:0 8px 25px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
 

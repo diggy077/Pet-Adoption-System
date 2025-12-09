@@ -203,9 +203,12 @@ main {
 
 .pet-grid {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  justify-content: center;
+  border-radius:16px;
+  padding: 3rem 1.5rem;
+  box-shadow:0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .pet-card {
@@ -353,7 +356,7 @@ main {
   border-radius: 16px;
   overflow: hidden;
   border: 3px solid #a4cbf2;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .login-image {
@@ -541,12 +544,17 @@ main {
   padding: 2rem;
 }
 
+.dashboard .pet-grid{
+  padding: 3rem 4rem;
+}
+
 .welcome {
   text-align: center;
   padding: 3rem 2rem;
-  background-color: #F5EEC8;
-  border: 2px solid #2b4660;
-  border-radius: 15px;
+  /* background-color: #F5EEC8;
+  border: 2px solid #2b4660; */
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
   margin-bottom: 2rem;
   margin-top: 5.5rem;
 }
@@ -572,8 +580,8 @@ main {
 ===============================*/
 
 .browse-container {
-  max-width: 1200px;
-  margin-top: 5.5rem;
+  max-width: 1000px;
+  margin: 5.5rem auto 0 auto;
 
 }
 
@@ -656,9 +664,11 @@ main {
 }
 
 .profile-info-card {
-  background-color: #F5EEC8;
+  /* background-color: #F5EEC8;
   border: 2px solid #2b4660;
-  border-radius: 15px;
+  border-radius: 15px; */
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   margin-bottom: 1.5rem;
   display: flex;
@@ -700,11 +710,13 @@ main {
 }
 
 .personal-info-section {
-  background-color: #F5EEC8;
+  /* background-color: #F5EEC8;
   border: 2px solid #2b4660;
-  border-radius: 15px;
+  border-radius: 15px; */
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
   padding: 2rem;
-  margin-bottom: 0rem;
+  margin-top: 3rem;
 }
 
 .section-header {
@@ -747,8 +759,9 @@ main {
 .info-item {
   background-color: #ffffff;
   padding: 1rem;
+  border: 1px solid #88BDF2;
   border-radius: 8px;
-  border-left: 4px solid #88BDF2
+  border-left: 5px solid #88BDF2;
 }
 
 .info-label {
@@ -764,15 +777,14 @@ main {
 }
 
 /* ============================
-   Profile PAGE 
+   Edit Profile PAGE 
 ===============================*/
 
 .edit-container {
   width: 800px;
   margin: 2rem auto;
-  background-color: #f5eec8;
-  border: 2px solid #2b4660;
   border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   padding: 2rem;
   margin-top: 6rem;
 
@@ -813,6 +825,14 @@ main {
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
   border-radius: 10px;
+.form-group input{
+    /* width: 100%; */
+    padding: 0.3rem;
+    border: 1px solid #88BDF2;
+    border-radius: 6px;
+    margin-top: 0.3rem;
+    margin-bottom: rem;
+    font-size: 1.5rem;
 }
 
 .btn-container {

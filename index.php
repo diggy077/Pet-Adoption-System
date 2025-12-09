@@ -1,19 +1,15 @@
 <?php
-session_start();
-
-$user_id = $_SESSION['id'] ?? null;
-$user_role=$_SESSION['role'] ?? null;
-
+include('connection.php');
+include('navbar.php');
 ?>
 <html>
+
 <head>
     <title>PetAdopt</title>
     <link rel="Stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-    <?php include("navbar.php"); ?>
-
     <main>
         <section class="intro">
             <h1>Find Your Pawfect Friend Today</h1>

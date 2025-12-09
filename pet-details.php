@@ -1,5 +1,7 @@
 <?php
+
 session_start();
+
 include("connection.php");
 include("navbar.php");
 
@@ -21,23 +23,27 @@ $user_role = $_SESSION['role'];
 
 // Fetch pet details
 $query = "SELECT * FROM pets WHERE id = '$pet_id'";
+
 $result = mysqli_query($con, $query);
+
 
 if (!$result || mysqli_num_rows($result) == 0) {
     header("Location: browsePets.php");
-    exit();
-}
 
+}
 $pet = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title><?php echo htmlspecialchars($pet['name']); ?> | PetAdopt</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
+
 <body>
     <div class="pet-details-wrapper">
         <!-- Hero Image Section -->
@@ -142,6 +148,7 @@ $pet = mysqli_fetch_assoc($result);
                     </button>
                 <?php endif; ?>
             </div>
+
         </div>
     </div>
 
@@ -167,6 +174,8 @@ $pet = mysqli_fetch_assoc($result);
     </script>
     <?php endif; ?>
 </body>
-</html>
 
 <?php include("footer.php"); ?>
+</html>
+
+

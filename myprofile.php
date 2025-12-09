@@ -13,7 +13,7 @@ $query = "SELECT full_name, email, phone_num, role FROM users WHERE id='$user_id
 $result = mysqli_query($con, $query);
 $user = mysqli_fetch_assoc($result);
 
-$role_text=($user['role']==1)?"Admin" : "User";
+$role_text=$_SESSION['role'] === 'superadmin' ? 'Super Admin' : ($_SESSION['role'] === 'admin' ? 'Admin' : 'User');
 ?>
 
 <html>

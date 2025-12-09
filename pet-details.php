@@ -4,31 +4,29 @@ session_start();
 
 include("connection.php");
 include("navbar.php");
+    
+    // Get pet ID from URL
+    if (!isset($_GET['id']) || empty($_GET['id'])) {
+        header("Location: browsePets.php");
+        exit();
+    }
+    
+    $pet_id = mysqli_real_escape_string($con, $_GET['id']);
+    if(isset($_SESSION['id'])){
 
-// Check if user is logged in
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
-}
+        $user_id = $_SESSION['id'];
+        $user_role = $_SESSION['role'];
+    }
 
-// Get pet ID from URL
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: browsePets.php");
-    exit();
-}
-
-$pet_id = mysqli_real_escape_string($con, $_GET['id']);
-$user_id = $_SESSION['id'];
-$user_role = $_SESSION['role'];
-
-// Fetch pet details
-$query = "SELECT * FROM pets WHERE id = '$pet_id'";
-
-$result = mysqli_query($con, $query);
-
-
-if (!$result || mysqli_num_rows($result) == 0) {
-    header("Location: browsePets.php");
+    
+    // Fetch pet details
+    $query = "SELECT * FROM pets WHERE id = '$pet_id'";
+    
+    $result = mysqli_query($con, $query);
+    
+    
+    if (!$result || mysqli_num_rows($result) == 0) {
+        header("Location: browsePets.php");
 
 }
 $pet = mysqli_fetch_assoc($result);
@@ -139,7 +137,7 @@ $pet = mysqli_fetch_assoc($result);
                     <i class="fas fa-arrow-left"></i> Back to Browse
                 </a>
 
-                <?php if ($user_role == 'admin'): ?>
+                <?php if (isset($user_role) && $user_role == 'admin'): ?>
                     <a href="editPet.php?id=<?php echo $pet['id']; ?>" class="btn-edit-pet">
                         <i class="fas fa-edit"></i> Edit Pet
                     </a>
@@ -153,7 +151,7 @@ $pet = mysqli_fetch_assoc($result);
     </div>
 
     <!-- Delete Modal (for admin) -->
-    <?php if ($user_role == 'admin'): ?>
+    <?php if (isset($user_role) && $user_role == 'admin'): ?>
     <div id="deleteModal">
         <div id="deleteModalContent">
             <p>Are you sure you want to delete <?php echo htmlspecialchars($pet['name']); ?>?</p>

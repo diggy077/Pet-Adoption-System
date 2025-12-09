@@ -3,7 +3,7 @@ session_start();
 include("connection.php");
 include("navbar.php");
 
-if(!isset($_SESSION['email'])){
+if(!isset($_SESSION['full_name'])){
     header("Location: login.php");
     exit();
 }

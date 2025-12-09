@@ -3,7 +3,7 @@ session_start();
 include("connection.php");
 $error_message = "";
 
-if ($_SERVER['REQUEST_METHOD'] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
@@ -13,13 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     if ($result && mysqli_num_rows($result) > 0) {
         $res = mysqli_fetch_assoc($result);
 
-        if ($password == $res['password']) {
+        if ($password === $res['password']) {
             $_SESSION['id'] = $res['id'];
-            $_SESSION['email'] = $res['email'];
+            $_SESSION['full_name'] = $res['full_name'];
             $_SESSION['role'] = $res['role'];
             header("Location: user.php");
             exit;
         } else {
+            
             $error_message = "Invalid Email or Password";
         }
     } else {
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 <h2 class="login-title">Pet Adoption System</h2>
 
-                <form method="POST" action="">
+                <form method="POST" action="login.php">
                     
                     <div class="input-group">
                         <label for="email">Email Address</label>

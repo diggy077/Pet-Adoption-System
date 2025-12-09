@@ -7,12 +7,10 @@ include("navbar.php");
 //     header("Location: login.php");
 //     exit();
 // }
-$user=null;
+
 if(isset($_SESSION['id'])){
-    $user_id = $_SESSION['id'];
-    $query = "SELECT full_name, role FROM users WHERE id=$user_id";
-    $result = mysqli_query($con, $query);
-    $user = mysqli_fetch_assoc($result);
+    $user_role=$_SESSION['role'];
+    $user_id=$_SESSION['id'];
 }
     
     $category_filter = "";
@@ -48,15 +46,15 @@ if(isset($_SESSION['id'])){
                     <option value="Rabbit" <?php if (isset($_GET['category']) && $_GET['category'] == 'Rabbit') echo 'selected'; ?>>Rabbit</option>
                 </select>
             </form>
-            <?php if($user): ?>
-                <?php if ($user['role'] == 'admin'): ?>
+            
+                <?php if (isset($user_role) && $user_role === 'admin'): ?>
                     <div style="margin-top: 1rem; text-align:right;">
                         <a href="addPet.php" class="adopt-btn">
                             ➕ Add New Pet
                         </a>
                     </div>
                 <?php endif; ?>
-            <?php endif; ?>
+            
         </div>
 
         <div class="pet-grid">
@@ -68,13 +66,12 @@ if(isset($_SESSION['id'])){
                         <p><?php echo htmlspecialchars($pet['breed']); ?></p>
                         <p><?php echo $pet['age']; ?> months old</p>
                         <a href="pet-details.php?id=<?php echo $pet['id']; ?>" class="adopt-btn"> View Details</a>
-                        <?php if($user): ?>
-                        <?php if ($user['role'] == 'admin'): ?>
+                        <?php if (isset($user_role) && $user_role === 'admin'): ?>
                             <button class="adopt-btn" style="background-color:red; color:white; margin-top:5px;" onclick="openDeleteModal(<?php echo $pet['id']; ?>)">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         <?php endif; ?>
-                        <?php endif; ?>
+                       
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>

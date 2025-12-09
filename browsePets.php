@@ -3,10 +3,7 @@ session_start();
 include("connection.php");
 include("navbar.php");
 
-if (!isset($_SESSION['id'])) {
-    header("Location: login.php");
-    exit();
-}
+
 $user_id = $_SESSION['id'];
 $query = "SELECT full_name, role FROM users WHERE id=$user_id";
 $result = mysqli_query($con, $query);
@@ -53,37 +50,40 @@ $pets_result = mysqli_query($con, $pets_query);
                     </div>
                 <?php endif; ?>
         </div>
-
-        <div class="pet-grid">
-            <?php if ($pets_result && mysqli_num_rows($pets_result) > 0): ?>
-                <?php while ($pet = mysqli_fetch_assoc($pets_result)): ?>
-                    <div class="pet-card">
-                        <img src="assets/images/<?php echo $pet['image'] ?? 'default_pet.jpg'; ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
-                        <h2><?php echo htmlspecialchars($pet['name']); ?></h2>
-                        <p><?php echo htmlspecialchars($pet['breed']); ?></p>
-                        <p><?php echo $pet['age']; ?> months old</p>
-                        <a href="pet-details.php?id=<?php echo $pet['id']; ?>" class="adopt-btn"> View Details</a>
-                        <?php if ($user['role'] == 'admin'): ?>
-                            <button class="adopt-btn" style="background-color:red; color:white; margin-top:5px;" onclick="openDeleteModal(<?php echo $pet['id']; ?>)">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        <?php endif; ?>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <h2 style="color:red; text-align:center;">No pets available at the moment 😿</h2>
-            <?php endif; ?>
-        </div>
+        
+        <section class="pets">
+            <div class="pet-grid">
+                <?php if ($pets_result && mysqli_num_rows($pets_result) > 0): ?>
+                    <?php while ($pet = mysqli_fetch_assoc($pets_result)): ?>
+                        <div class="pet-card">
+                            <img src="assets/images/<?php echo $pet['image'] ?? 'default_pet.jpg'; ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
+                            <h2><?php echo htmlspecialchars($pet['name']); ?></h2>
+                            <p><?php echo htmlspecialchars($pet['breed']); ?></p>
+                            <p><?php echo $pet['age']; ?> months old</p>
+                            <a href="pet-details.php?id=<?php echo $pet['id']; ?>" class="adopt-btn"> View Details</a>
+                            <?php if ($user['role'] == 'admin'): ?>
+                                <button class="adopt-btn" style="background-color:red; color:white; margin-top:5px;" onclick="openDeleteModal(<?php echo $pet['id']; ?>)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            <?php endif; ?>
+                        </div>
+                            <?php endwhile; ?>
+                            <?php else: ?>
+                                <h2 style="color:red; text-align:center;">No pets available at the moment 😿</h2>
+                            <?php endif; ?>
+            </div>
+        </section>
     </div>
-        <div id="deleteModal">
+
+                    
+    <div id="deleteModal">
         <div id="deleteModalContent">
             <p>Are you sure you want to delete this pet?</p>
             <a id="confirmDelete" href=""><button id="deleteBtn">Delete</button></a>
             <button id="cancelBtn" onclick="closeDeleteModal()">Cancel</button>
         </div>
     </div>
-
-    <script>
+                        <script>
         function openDeleteModal(petId) {
             document.getElementById('deleteModal').style.display = 'block';
             document.getElementById('confirmDelete').href = 'deletePet.php?id=' + petId;

@@ -42,13 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <title>Add Pets| PetAdopt</title>
     <style>
-        body {
-            font-family: 'Agdasima';
-        }
+        
 
         .container {
             width: 50vw;
             margin: 1.5rem auto;
+            margin-top: 5.5rem;
             padding: 1rem 2rem;
             background: white;
             border-radius: 12px;

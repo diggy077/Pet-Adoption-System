@@ -5,7 +5,6 @@ session_start();
 include("connection.php");
 include("navbar.php");
     
-    // Get pet ID from URL
     if (!isset($_GET['id']) || empty($_GET['id'])) {
         header("Location: browsePets.php");
         exit();
@@ -19,7 +18,6 @@ include("navbar.php");
     }
 
     
-    // Fetch pet details
     $query = "SELECT * FROM pets WHERE id = '$pet_id'";
     
     $result = mysqli_query($con, $query);
@@ -44,7 +42,6 @@ $pet = mysqli_fetch_assoc($result);
 
 <body>
     <div class="pet-details-wrapper">
-        <!-- Hero Image Section -->
         <div class="pet-hero-section">
             <img src="assets/images/<?php echo $pet['image'] ?? 'default_pet.jpg'; ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
             <div class="pet-hero-overlay">
@@ -53,7 +50,6 @@ $pet = mysqli_fetch_assoc($result);
             </div>
         </div>
 
-        <!-- Quick Info Cards -->
         <div class="pet-quick-info">
             <div class="quick-info-card">
                 <i class="fas fa-birthday-cake"></i>
@@ -78,17 +74,8 @@ $pet = mysqli_fetch_assoc($result);
                     <span class="info-value"><?php echo htmlspecialchars($pet['category']); ?></span>
                 </div>
             </div>
-
-            <!-- <div class="quick-info-card">
-                <i class="fas fa-palette"></i>
-                <div class="quick-info-content">
-                    <span class="info-label">Color</span>
-                    <span class="info-value"><?php //echo htmlspecialchars($pet['color']); ?></span>
-                </div>
-            </div> -->
         </div>
 
-        <!-- Detailed Information Section -->
         <div class="pet-details-content">
             <div class="details-main">
                 <div class="about-section">
@@ -121,7 +108,6 @@ $pet = mysqli_fetch_assoc($result);
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="pet-actions">
                 <?php if ($pet['status'] == 'available'): ?>
                     <a href="adoptionRequest.php?pet_id=<?php echo $pet['id']; ?>" class="btn-adopt-pet">
@@ -150,7 +136,6 @@ $pet = mysqli_fetch_assoc($result);
         </div>
     </div>
 
-    <!-- Delete Modal (for admin) -->
     <?php if (isset($user_role) && $user_role == 'admin'): ?>
     <div id="deleteModal">
         <div id="deleteModalContent">

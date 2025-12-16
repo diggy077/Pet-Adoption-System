@@ -110,9 +110,15 @@ $pet = mysqli_fetch_assoc($result);
 
             <div class="pet-actions">
                 <?php if ($pet['status'] == 'available'): ?>
+                    <?php if (isset($_SESSION['id'])) : ?>
                     <a href="adoptionRequest.php?pet_id=<?php echo $pet['id']; ?>" class="btn-adopt-pet">
                         <i class="fas fa-heart"></i> Adopt <?php echo htmlspecialchars($pet['name']); ?>
                     </a>
+                    <?php else: ?>
+                    <a href="login.php?pet_id=<?php echo $pet['id']; ?>" class="btn-adopt-pet">
+                        <i class="fas fa-heart"></i> Adopt <?php echo htmlspecialchars($pet['name']); ?>
+                    </a>
+                    <?php endif; ?>
                 <?php else: ?>
                     <button class="btn-adopt-pet btn-disabled" disabled>
                         <i class="fas fa-ban"></i> Not Available

@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Agdasima', sans-serif;
+  font-family: "Agdasima", sans-serif;
 }
 
 body {
@@ -25,8 +25,8 @@ main {
   align-items: center;
   justify-content: space-between;
   padding: 0 30px;
-  border: 1px solid #BDDDFC;
-  background-color: #BDDDFC;
+  border: 1px solid #bdddfc;
+  background-color: #bdddfc;
   height: 70px;
   position: fixed;
   top: 0;
@@ -82,14 +82,14 @@ main {
   font-size: 20px;
   font-weight: 700;
   padding: 5px 20px;
-  border: 1px solid #88BDF2;
-  background-color: #88BDF2;
+  border: 1px solid #88bdf2;
+  background-color: #88bdf2;
   border-radius: 10px;
   text-decoration: none;
 }
 
 .Login_Button a:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
 }
 
@@ -112,7 +112,7 @@ main {
 }
 
 .intro_button button {
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   border: none;
   border-radius: 5px;
   font-weight: 700;
@@ -122,7 +122,7 @@ main {
 }
 
 .intro_button button:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
 }
 
@@ -138,7 +138,6 @@ main {
 .how-it-works h2 {
   font-size: 25px;
   margin-bottom: 1rem;
-
 }
 
 .how-it-works p {
@@ -154,7 +153,7 @@ main {
 }
 
 .step {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   border: 2px solid #2b4660;
   border-radius: 8px;
   padding: 1.5rem;
@@ -164,7 +163,7 @@ main {
 }
 
 .why-choose-us {
-  background-color: #BDDDFC;
+  background-color: #bdddfc;
   text-align: center;
   padding: 3rem 2rem;
 }
@@ -182,7 +181,7 @@ main {
 }
 
 .why-choose-us li {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   border-left: 4px solid #2b4660;
   margin: 0.5rem 0;
   padding: 0.75rem 1rem;
@@ -193,7 +192,6 @@ main {
 .pets {
   text-align: center;
   padding: 3rem 2rem;
-
 }
 
 .pets h2 {
@@ -206,13 +204,13 @@ main {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  border-radius:16px;
+  border-radius: 16px;
   padding: 3rem 1.5rem;
-  box-shadow:0 8px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .pet-card {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   border: 2px solid #2b4660;
   border-radius: 8px;
   padding: 1rem;
@@ -222,7 +220,7 @@ main {
 
 .pet-card:hover {
   transform: translateY(-5px);
-  background-color: #D0D4CA;
+  background-color: #d0d4ca;
 }
 
 .pet-card img {
@@ -245,7 +243,7 @@ main {
 
 .adopt-btn {
   text-decoration: none;
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   color: black;
   border: none;
   width: auto;
@@ -261,13 +259,12 @@ main {
 }
 
 .adopt-btn:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
 }
 
-
 .testimonials {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   text-align: center;
   padding: 3rem 2rem;
 }
@@ -299,7 +296,7 @@ main {
 }
 
 .fun-fact {
-  background-color: #D0D4CA;
+  background-color: #d0d4ca;
   text-align: center;
   font-size: 20px;
   padding: 1rem;
@@ -320,7 +317,7 @@ main {
 }
 
 .footersection {
-  background-color: #BDDDFC;
+  background-color: #bdddfc;
   text-align: center;
   padding: 20px 0;
   margin-top: 3rem;
@@ -339,7 +336,7 @@ main {
 .login-wrapper {
   width: 100%;
   min-height: 100vh;
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -361,7 +358,7 @@ main {
 
 .login-image {
   width: 45%;
-  background: linear-gradient(135deg, #a4cbf2 0%, #7AB2B2 100%);
+  background: linear-gradient(135deg, #a4cbf2 0%, #7ab2b2 100%);
   position: relative;
   overflow: hidden;
 }
@@ -391,7 +388,7 @@ main {
   height: 70px;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #5596D6;
+  border: 3px solid #5596d6;
   padding: 4px;
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(85, 150, 214, 0.3);
@@ -432,7 +429,7 @@ main {
   width: 100%;
   padding: 0.75rem 0.9rem;
   margin: 0;
-  border: 2px solid #D0D4CA;
+  border: 2px solid #d0d4ca;
   border-radius: 8px;
   background-color: #ffffff;
   font-size: 0.95rem;
@@ -444,7 +441,7 @@ main {
 .login-form input[type="tel"]:focus,
 .login-form input[type="password"]:focus {
   outline: none;
-  border-color: #5596D6;
+  border-color: #5596d6;
   box-shadow: 0 0 0 3px rgba(85, 150, 214, 0.1);
 }
 
@@ -461,7 +458,7 @@ main {
 }
 
 .forgot-password a {
-  color: #5596D6;
+  color: #5596d6;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: bold;
@@ -469,13 +466,13 @@ main {
 }
 
 .forgot-password a:hover {
-  color: #7AB2B2;
+  color: #7ab2b2;
   text-decoration: underline;
 }
 
 .login-submit {
   width: 100%;
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #050505;
   border: none;
   padding: 0.85rem;
@@ -488,7 +485,7 @@ main {
 }
 
 .login-submit:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(122, 178, 178, 0.4);
@@ -502,7 +499,7 @@ main {
   text-align: center;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 2px solid #F5EEC8;
+  border-top: 2px solid #f5eec8;
 }
 
 .signup-link p {
@@ -512,14 +509,14 @@ main {
 }
 
 .signup-link a {
-  color: #5596D6;
+  color: #5596d6;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s;
 }
 
 .signup-link a:hover {
-  color: #7AB2B2;
+  color: #7ab2b2;
   text-decoration: underline;
 }
 
@@ -544,7 +541,7 @@ main {
   padding: 2rem;
 }
 
-.dashboard .pet-grid{
+.dashboard .pet-grid {
   padding: 3rem 4rem;
 }
 
@@ -554,7 +551,7 @@ main {
   /* background-color: #F5EEC8;
   border: 2px solid #2b4660; */
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   margin-bottom: 2rem;
   margin-top: 5.5rem;
 }
@@ -582,7 +579,6 @@ main {
 .browse-container {
   max-width: 1000px;
   margin: 5.5rem auto 0 auto;
-
 }
 
 .browse-header {
@@ -602,6 +598,11 @@ main {
 
 .browse-header p {
   font-size: 1.2rem;
+}
+
+.addPet-option{
+  margin-top: 1rem;
+  text-align:right;
 }
 
 #deleteModal {
@@ -649,7 +650,7 @@ main {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 2rem;
-  margin-top: 5rem
+  margin-top: 5rem;
 }
 
 .profile-header {
@@ -679,7 +680,7 @@ main {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -703,7 +704,7 @@ main {
 .profile-role {
   font-size: 1.2rem;
   color: #000;
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   padding: 0.3rem 1rem;
   border-radius: 20px;
   display: inline-block;
@@ -734,7 +735,7 @@ main {
 }
 
 .edit-btn {
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   border: 2px solid #2b4660;
   border-radius: 8px;
   padding: 0.5rem 1.5rem;
@@ -746,7 +747,7 @@ main {
 }
 
 .edit-btn:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
 }
 
@@ -759,9 +760,9 @@ main {
 .info-item {
   background-color: #ffffff;
   padding: 1rem;
-  border: 1px solid #88BDF2;
+  border: 1px solid #88bdf2;
   border-radius: 8px;
-  border-left: 5px solid #88BDF2;
+  border-left: 5px solid #88bdf2;
 }
 
 .info-label {
@@ -787,7 +788,6 @@ main {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   padding: 2rem;
   margin-top: 6rem;
-
 }
 
 .edit-container h1 {
@@ -821,15 +821,14 @@ main {
   margin-bottom: 8px;
 }
 
-
-.form-group input{
-    /* width: 100%; */
-    padding: 0.3rem;
-    border: 1px solid #88BDF2;
-    border-radius: 6px;
-    margin-top: 0.3rem;
-    margin-bottom: rem;
-    font-size: 1.5rem;
+.form-group input {
+  /* width: 100%; */
+  padding: 0.3rem;
+  border: 1px solid #88bdf2;
+  border-radius: 6px;
+  margin-top: 0.3rem;
+  margin-bottom: rem;
+  font-size: 1.5rem;
 }
 
 .btn-container {
@@ -837,7 +836,7 @@ main {
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1.5rem;
-  grid-column: 1 /span 2;
+  grid-column: 1 / span 2;
 }
 
 button,
@@ -860,12 +859,12 @@ a.cancel-btn:hover {
 }
 
 .btn-container button {
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   color: #000000;
 }
 
 .btn-container button:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #fff;
 }
 
@@ -909,7 +908,11 @@ a.cancel-btn:hover {
   height: 500px;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(to bottom, rgba(43, 70, 96, 0.3), rgba(43, 70, 96, 0.7));
+  background: linear-gradient(
+    to bottom,
+    rgba(43, 70, 96, 0.3),
+    rgba(43, 70, 96, 0.7)
+  );
 }
 
 .pet-hero-section img {
@@ -950,7 +953,7 @@ a.cancel-btn:hover {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 40px;
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   border-bottom: 3px solid #2b4660;
 }
 
@@ -972,7 +975,7 @@ a.cancel-btn:hover {
 
 .quick-info-card i {
   font-size: 2.5rem;
-  color: #88BDF2;
+  color: #88bdf2;
   min-width: 50px;
   text-align: center;
 }
@@ -1008,7 +1011,7 @@ a.cancel-btn:hover {
 }
 
 .about-section {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   border: 2px solid #2b4660;
   border-radius: 15px;
   padding: 35px;
@@ -1019,13 +1022,13 @@ a.cancel-btn:hover {
   color: #2b4660;
   font-size: 2rem;
   margin-bottom: 20px;
-  border-bottom: 3px solid #88BDF2;
+  border-bottom: 3px solid #88bdf2;
   padding-bottom: 15px;
 }
 
 .about-section h2 i {
   margin-right: 10px;
-  color: #88BDF2;
+  color: #88bdf2;
 }
 
 .about-section p {
@@ -1035,7 +1038,7 @@ a.cancel-btn:hover {
 }
 
 .additional-info-section {
-  background-color: #BDDDFC;
+  background-color: #bdddfc;
   border: 2px solid #2b4660;
   border-radius: 15px;
   padding: 35px;
@@ -1078,7 +1081,7 @@ a.cancel-btn:hover {
 
 .detail-label i {
   margin-right: 8px;
-  color: #88BDF2;
+  color: #88bdf2;
 }
 
 .detail-value {
@@ -1110,7 +1113,7 @@ a.cancel-btn:hover {
   flex-wrap: wrap;
   justify-content: center;
   padding-top: 20px;
-  border-top: 3px solid #F5EEC8;
+  border-top: 3px solid #f5eec8;
 }
 
 .btn-adopt-pet,
@@ -1131,19 +1134,19 @@ a.cancel-btn:hover {
 }
 
 .btn-adopt-pet {
-  background-color: #88BDF2;
+  background-color: #88bdf2;
   color: #000000;
 }
 
 .btn-adopt-pet:hover {
-  background-color: #5596D6;
+  background-color: #5596d6;
   color: #ffffff;
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(85, 150, 214, 0.4);
 }
 
 .btn-back-browse {
-  background-color: #F5EEC8;
+  background-color: #f5eec8;
   color: #2b4660;
 }
 
@@ -1185,6 +1188,122 @@ a.cancel-btn:hover {
   transform: none !important;
   box-shadow: none !important;
 }
+
+/* Add Pet */
+.container {
+  width: 50vw;
+  margin: 1.5rem auto;
+  margin-top: 5.5rem;
+  padding: 1rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #2b4660;
+}
+
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.success_message {
+  color: green;
+}
+
+.error_message {
+  color: red;
+}
+
+form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-size: 1.25rem;
+  font-weight: bold;
+  /* margin-top: 1rem; */
+  color: #2b4660;
+}
+
+.container input[type="file"] {
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.category-form {
+  margin-top: 1rem;
+  display: inline;
+}
+.category-form select {
+  /* width: 50%; */
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #2b4660;
+  margin-left: 10px;
+  font-size: 1rem;
+}
+/* .addPetinput {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+        } */
+
+.container input[type="text"],
+.container input[type="number"],
+.container select,
+.container textarea {
+  width: 100%;
+  padding: 0.3rem;
+  border: 1px solid #88bdf2;
+  border-radius: 6px;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+}
+
+textarea {
+  height: 80px;
+  margin-bottom: 0rem;
+}
+
+.submit-btn {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  background-color: #88bdf2;
+  border: 0rem;
+  border-radius: 10px;
+  padding: 7px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #5596d6;
+  color: white;
+}
+
+/* Edit Pet detail*/
+.editPetinput .current-image{
+  width: 46vw;
+  height: 70vh;
+  border-radius: 1rem;
+}
+
 
 /* Responsive Design for Pet Details */
 @media (max-width: 1024px) {

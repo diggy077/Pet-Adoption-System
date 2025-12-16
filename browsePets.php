@@ -37,9 +37,9 @@ if(isset($_SESSION['id'])){
             <h1>🐾 Browse All Pets</h1>
             <p>Find your perfect companion from out list of adorable pets available for adoption.</p>
             
-            <form method="GET" action="browsePets.php" style="margin-top: 1.0rem;">
+            <form method="GET" action="browsePets.php" class="category-form">
                 <label for="category" style="font-size:1.1rem; font-weight:bold; color:#2b4660;">Category:</label>
-                <select name="category" id="category" onchange="this.form.submit()" style="padding: 0.5rem 1rem; border-radius:5px; border:1px solid #2b4660; margin-left:10px; font-size:1rem;">
+                <select name="category" id="category" onchange="this.form.submit()">
                     <option value="">All</option>
                     <option value="Dog" <?php if (isset($_GET['category']) && $_GET['category'] == 'Dog') echo 'selected'; ?>>Dog</option>
                     <option value="Cat" <?php if (isset($_GET['category']) && $_GET['category'] == 'Cat') echo 'selected'; ?>>Cat</option>
@@ -48,7 +48,7 @@ if(isset($_SESSION['id'])){
             </form>
             
                 <?php if (isset($user_role) && $user_role === 'admin'): ?>
-                    <div style="margin-top: 1rem; text-align:right;">
+                    <div class="addpet-option" >
                         <a href="addPet.php" class="adopt-btn">
                             ➕ Add New Pet
                         </a>

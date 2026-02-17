@@ -21,7 +21,7 @@ if (isset($_SESSION['id'])) {
     <header>
         <div class="navigationbar">
             <a class="leftsection">
-                <img src="assets/images/paw.png" alt="Logo" class="logo">
+                <img src="assets/images/logo.png" alt="Logo" class="logo">
                 <span class="Title">PetAdopt</span>
             </a>
             <div class="MidSection">

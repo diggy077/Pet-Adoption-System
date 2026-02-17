@@ -5,30 +5,26 @@ session_start();
 include("connection.php");
 include("navbar.php");
     
-    // Get pet ID from URL
-    if (!isset($_GET['id']) || empty($_GET['id'])) {
-        header("Location: browsePets.php");
-        exit();
-    }
-    
-    $pet_id = mysqli_real_escape_string($con, $_GET['id']);
-    if(isset($_SESSION['id'])){
-
-        $user_id = $_SESSION['id'];
-        $user_role = $_SESSION['role'];
-    }
-
-    
-    // Fetch pet details
-    $query = "SELECT * FROM pets WHERE id = '$pet_id'";
-    
-    $result = mysqli_query($con, $query);
-    
-    
-    if (!$result || mysqli_num_rows($result) == 0) {
-        header("Location: browsePets.php");
-
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: browsePets.php");
+    exit();
 }
+
+$pet_id = mysqli_real_escape_string($con, $_GET['id']);
+
+if(isset($_SESSION['id'])){
+    $user_id = $_SESSION['id'];
+    $user_role = $_SESSION['role'];
+}
+
+$query = "SELECT * FROM pets WHERE id = '$pet_id'";
+$result = mysqli_query($con, $query);
+
+if (!$result || mysqli_num_rows($result) == 0) {
+    header("Location: browsePets.php");
+    exit();
+}
+
 $pet = mysqli_fetch_assoc($result);
 ?>
 
@@ -39,12 +35,10 @@ $pet = mysqli_fetch_assoc($result);
     <title><?php echo htmlspecialchars($pet['name']); ?> | PetAdopt</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 
 <body>
     <div class="pet-details-wrapper">
-        <!-- Hero Image Section -->
         <div class="pet-hero-section">
             <img src="assets/images/<?php echo $pet['image'] ?? 'default_pet.jpg'; ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
             <div class="pet-hero-overlay">
@@ -53,7 +47,6 @@ $pet = mysqli_fetch_assoc($result);
             </div>
         </div>
 
-        <!-- Quick Info Cards -->
         <div class="pet-quick-info">
             <div class="quick-info-card">
                 <i class="fas fa-birthday-cake"></i>
@@ -78,17 +71,8 @@ $pet = mysqli_fetch_assoc($result);
                     <span class="info-value"><?php echo htmlspecialchars($pet['category']); ?></span>
                 </div>
             </div>
-
-            <!-- <div class="quick-info-card">
-                <i class="fas fa-palette"></i>
-                <div class="quick-info-content">
-                    <span class="info-label">Color</span>
-                    <span class="info-value"><?php //echo htmlspecialchars($pet['color']); ?></span>
-                </div>
-            </div> -->
         </div>
 
-        <!-- Detailed Information Section -->
         <div class="pet-details-content">
             <div class="details-main">
                 <div class="about-section">
@@ -121,43 +105,55 @@ $pet = mysqli_fetch_assoc($result);
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="pet-actions">
-                <?php if ($pet['status'] == 'available'): ?>
-                    <?php if (isset($_SESSION['id'])) : ?>
+                <?php 
+                if ($pet['status'] == 'available') {
+                    if (isset($_SESSION['id'])) {
+                ?>
                     <a href="adoptionRequest.php?pet_id=<?php echo $pet['id']; ?>" class="btn-adopt-pet">
                         <i class="fas fa-heart"></i> Adopt <?php echo htmlspecialchars($pet['name']); ?>
                     </a>
-                    <?php else: ?>
+                <?php 
+                    } else {
+                ?>
                     <a href="login.php?pet_id=<?php echo $pet['id']; ?>" class="btn-adopt-pet">
                         <i class="fas fa-heart"></i> Adopt <?php echo htmlspecialchars($pet['name']); ?>
                     </a>
-                    <?php endif; ?>
-                <?php else: ?>
+                <?php 
+                    }
+                } else {
+                ?>
                     <button class="btn-adopt-pet btn-disabled" disabled>
                         <i class="fas fa-ban"></i> Not Available
                     </button>
-                <?php endif; ?>
+                <?php 
+                }
+                ?>
                 
                 <a href="browsePets.php" class="btn-back-browse">
                     <i class="fas fa-arrow-left"></i> Back to Browse
                 </a>
 
-                <?php if (isset($user_role) && $user_role == 'admin'): ?>
+                <?php 
+                if (isset($user_role) && $user_role == 'admin') {
+                ?>
                     <a href="editPet.php?id=<?php echo $pet['id']; ?>" class="btn-edit-pet">
                         <i class="fas fa-edit"></i> Edit Pet
                     </a>
                     <button class="btn-delete-pet" onclick="openDeleteModal(<?php echo $pet['id']; ?>)">
                         <i class="fas fa-trash"></i> Delete Pet
                     </button>
-                <?php endif; ?>
+                <?php 
+                }
+                ?>
             </div>
 
         </div>
     </div>
 
-    <!-- Delete Modal (for admin) -->
-    <?php if (isset($user_role) && $user_role == 'admin'): ?>
+    <?php 
+    if (isset($user_role) && $user_role == 'admin') {
+    ?>
     <div id="deleteModal">
         <div id="deleteModalContent">
             <p>Are you sure you want to delete <?php echo htmlspecialchars($pet['name']); ?>?</p>
@@ -176,10 +172,10 @@ $pet = mysqli_fetch_assoc($result);
             document.getElementById('deleteModal').style.display = 'none';
         }
     </script>
-    <?php endif; ?>
+    <?php 
+    }
+    ?>
 </body>
 
 <?php include("footer.php"); ?>
 </html>
-
-

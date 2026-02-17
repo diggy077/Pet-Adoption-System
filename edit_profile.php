@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($new_password) || !empty($password1)) {
         if (empty($current_password)) {
-            $error = "Please enter your current password.";
+            $error = "Please enter your current
+             password.";
         } elseif ($current_password !== $user['password']) {
             $error = "Password Incorrect!";
         } elseif ($new_password !== $password1) {

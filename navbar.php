@@ -8,7 +8,6 @@ if (isset($_SESSION['id'])) {
     $query = "SELECT full_name, email, phone_num, role FROM users WHERE id='$user_id'";
     $result = mysqli_query($con, $query);
     $user = mysqli_fetch_assoc($result);
-
 }
 
 ?>
@@ -34,10 +33,14 @@ if (isset($_SESSION['id'])) {
                 <a href="browsePets.php">Browse Pets</a>
 
                 <?php if ($user): ?>
-                    <a href="myRequests.php">My Requests</a>
+                    <?php if ($user['role'] == 'admin'): ?>
+                        <a href="userRequests.php">User Request</a>
+                    <?php else: ?>
+                        <a href="myRequests.php">My Requests</a>
+                    <?php endif; ?>
                     <a href="myprofile.php">My Profile</a>
                     <?php if ($user['role'] == 'superadmin'): ?>
-                        <a href="admin.php">Admin Panel</a>
+                        <a href="adminpanel.php">Admin Panel</a>
                     <?php endif; ?>
                 <?php else: ?>
                     <a href="index.php#about">About Us</a>

@@ -34,7 +34,7 @@ if (isset($_SESSION['id'])) {
 
                 <?php if ($user): ?>
                     <?php if ($user['role'] == 'admin'): ?>
-                        <a href="userRequests.php">User Request</a>
+                        <a href="myRequests.php">User Request</a>
                     <?php else: ?>
                         <a href="myRequests.php">My Requests</a>
                     <?php endif; ?>

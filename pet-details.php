@@ -88,12 +88,8 @@ $pet = mysqli_fetch_assoc($result);
                             <span class="detail-value"><?php echo htmlspecialchars($pet['breed']); ?></span>
                         </div>
                         <div class="info-detail-item">
-                            <span class="detail-label"><i class="fas fa-ruler-vertical"></i> Size</span>
-                            <span class="detail-value"><?php echo htmlspecialchars($pet['size'] ?? 'Medium'); ?></span>
-                        </div>
-                        <div class="info-detail-item">
                             <span class="detail-label"><i class="fas fa-weight"></i> Weight</span>
-                            <span class="detail-value"><?php echo htmlspecialchars($pet['weight'] ?? 'N/A'); ?></span>
+                            <span class="detail-value"><?php echo htmlspecialchars($pet['weight'] ?? 'N/A'); ?> kg</span>
                         </div>
                         <div class="info-detail-item">
                             <span class="detail-label"><i class="fas fa-check-circle"></i> Status</span>

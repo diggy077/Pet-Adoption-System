@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $_POST['gender'];
     $breed = $_POST['breed'];
     $price = $_POST['price'];
+    $weight = $_POST['weight'];
     $category = $_POST['category'];
     $description = $_POST['description'];
 
@@ -24,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (move_uploaded_file($image_tmp, $upload_folder . $image_name)) {
 
-        $sql = "INSERT INTO pets (name, age, gender, breed, price, image, category, description) 
-                VALUES ('$name', '$age', '$gender', '$breed', '$price', '$image_name', '$category', '$description')";
+        $sql = "INSERT INTO pets (name, age, gender, breed, price, image, category, description, weight) 
+                VALUES ('$name', '$age', '$gender', '$breed', '$price', '$image_name', '$category', '$description', '$weight')";
 
         if (mysqli_query($con, $sql)) {
             $message = "<div class='message success_message'>New Pet Added Successfully!</div>";
@@ -82,6 +83,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="addPetinput">
                 <label for="price">Price</label>
                 <input type="number" name="price" required>
+            </div>
+
+            <div class="addPetinput">
+                <label for="weight">Weight (in kg)</label>
+                <input type="text" name="weight" required>
             </div>
 
             <div class="addPetinput">

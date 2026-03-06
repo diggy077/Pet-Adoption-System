@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $gender = mysqli_real_escape_string($con, $_POST['gender']);
     $breed = mysqli_real_escape_string($con, $_POST['breed']);
     $price = floatval($_POST['price']);
+    $weight = mysqli_real_escape_string($con, $_POST['weight']);
     $category = mysqli_real_escape_string($con, $_POST['category']);
     $description = mysqli_real_escape_string($con, $_POST['description']);
 
@@ -50,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         age=$age,
                         gender='$gender',
                         breed='$breed',
-                        price=$price,
+                        price='$price',
+                        weight='$weight',
                         category='$category',
                         description='$description',
                         image='$imageName'
@@ -106,6 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <div class="addPetinput">
                 <label for="price">Price</label>
                 <input type="number" name="price" value="<?php echo htmlspecialchars($pet['price']); ?>" required>
+            </div>
+
+            <div class="addPetinput">
+                <label for="weight">Weight (in kg)</label>
+                <input type="text" name="weight" value="<?php echo htmlspecialchars($pet['weight']); ?>" required>
             </div>
 
             <div class="addPetinput">

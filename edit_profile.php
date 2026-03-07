@@ -7,42 +7,62 @@ if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit();
 }
-
 $user_id = $_SESSION['id'];
-$query = "SELECT full_name, email, phone_num, role, password FROM users WHERE id='$user_id'";
-$result = mysqli_query($con, $query);
-$user = mysqli_fetch_assoc($result);
+$stmt = $con->prepare("SELECT full_name, email, phone_num, role, password FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
 $success = $error = "";
-$update_query = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $full_name = $_POST['full_name'];
     $phone_num = $_POST['phone_num'];
     $current_password = $_POST['current_password'];
     $new_password = $_POST['password'];
     $password1 = $_POST['password1'];
 
+    $update_password = false;
+
     if (!empty($new_password) || !empty($password1)) {
         if (empty($current_password)) {
-            $error = "Please enter your current
-             password.";
-        } elseif ($current_password !== $user['password']) {
-            $error = "Password Incorrect!";
-        } elseif ($new_password !== $password1) {
+            $error = "Please enter your current password.";
+        } 
+        elseif (!password_verify($current_password, $user['password'])) {
+            $error = "Current password is incorrect!";
+        } 
+        elseif ($new_password !== $password1) {
             $error = "New passwords do not match!";
         } else {
-            $update_query = "UPDATE users SET full_name='$full_name', phone_num='$phone_num', password='$new_password' 
-                             WHERE id='$user_id'";
+            $update_password = true;
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
         }
     }
-}
-if (empty($error) && $update_query) {
-    if (mysqli_query($con, $update_query)) {
-        $success = "Profile updated successfully!";
-        $result = mysqli_query($con, $query);
-        $user = mysqli_fetch_assoc($result);
-    } else {
-        $error = "Something went wrong. Please try again.";
+
+    if (empty($error)) {
+        if ($update_password) {
+            $stmt = $con->prepare("UPDATE users SET full_name = ?, phone_num = ?, password = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $full_name, $phone_num, $hashed_password, $user_id);
+        } else {
+            $stmt = $con->prepare("UPDATE users SET full_name = ?, phone_num = ? WHERE id = ?");
+            $stmt->bind_param("ssi", $full_name, $phone_num, $user_id);
+        }
+
+        if ($stmt->execute()) {
+            $success = "Profile updated successfully!";
+            $stmt->close();
+            $stmt = $con->prepare("SELECT full_name, email, phone_num, role, password FROM users WHERE id = ?");
+            $stmt->bind_param("i", $user_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result->fetch_assoc();
+            $stmt->close();
+        } else {
+            $error = "Something went wrong. Please try again.";
+        }
     }
 }
 ?>

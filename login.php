@@ -6,26 +6,30 @@ $error_message = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $password = $_POST["password"];
+    $stmt = $con->prepare("SELECT id, full_name, role, password FROM users WHERE email = ?");
+    
+    $stmt->bind_param("s", $email);
 
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = mysqli_query($con, $sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $res = mysqli_fetch_assoc($result);
-
+    if ($result->num_rows > 0) {
+        $res = $result->fetch_assoc();
         if ($password === $res['password']) {
+
             $_SESSION['id'] = $res['id'];
             $_SESSION['full_name'] = $res['full_name'];
             $_SESSION['role'] = $res['role'];
+
             header("Location: user.php");
             exit;
         } else {
-            
             $error_message = "Invalid Email or Password";
         }
     } else {
         $error_message = "User Does Not Exist!";
     }
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>

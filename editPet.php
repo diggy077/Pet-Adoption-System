@@ -15,54 +15,72 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $pet_id = intval($_GET['id']);
 
-$query = "SELECT * FROM pets WHERE id = $pet_id";
-$result = mysqli_query($con, $query);
+// Fetch pet details using prepared statement
+$stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
+$stmt->bind_param("i", $pet_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$pet = $result->fetch_assoc();
+$stmt->close();
 
-$pet = mysqli_fetch_assoc($result);
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     $pet_id = intval($_POST['pet_id']);
-    $name = mysqli_real_escape_string($con, $_POST['name']);
+    $name = $_POST['name'];
     $age = intval($_POST['age']);
-    $gender = mysqli_real_escape_string($con, $_POST['gender']);
-    $breed = mysqli_real_escape_string($con, $_POST['breed']);
+    $gender = $_POST['gender'];
+    $breed = $_POST['breed'];
     $price = floatval($_POST['price']);
-    $weight = mysqli_real_escape_string($con, $_POST['weight']);
-    $category = mysqli_real_escape_string($con, $_POST['category']);
-    $description = mysqli_real_escape_string($con, $_POST['description']);
+    $weight = $_POST['weight'];
+    $category = $_POST['category'];
+    $description = $_POST['description'];
 
-    // Fetch old image
-    $query = "SELECT image FROM pets WHERE id=$pet_id";
-    $result = mysqli_query($con, $query);
-    $oldData = mysqli_fetch_assoc($result);
+    // Fetch old image using prepared statement
+    $stmt = $con->prepare("SELECT image FROM pets WHERE id = ?");
+    $stmt->bind_param("i", $pet_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $oldData = $result->fetch_assoc();
     $oldImage = $oldData['image'];
+    $stmt->close();
 
     $imageName = $oldImage;
 
     if (!empty($_FILES['image']['name'])) {
         $imageName = time() . "_" . $_FILES['image']['name'];
-
         move_uploaded_file($_FILES['image']['tmp_name'], "assets/images/" . $imageName);
     }
 
-    $updateQuery = "UPDATE pets SET 
-                        name='$name',
-                        age=$age,
-                        gender='$gender',
-                        breed='$breed',
-                        price='$price',
-                        weight='$weight',
-                        category='$category',
-                        description='$description',
-                        image='$imageName'
-                    WHERE id=$pet_id";
+    // Update pet details using prepared statement
+    $stmt = $con->prepare("UPDATE pets SET 
+                                name = ?, 
+                                age = ?, 
+                                gender = ?, 
+                                breed = ?, 
+                                price = ?, 
+                                weight = ?, 
+                                category = ?, 
+                                description = ?, 
+                                image = ? 
+                            WHERE id = ?");
+    $stmt->bind_param("sissdssssi", $name, $age, $gender, $breed, $price, $weight, $category, $description, $imageName, $pet_id);
 
-    if (mysqli_query($con, $updateQuery)) {
+    if ($stmt->execute()) {
         $message = "<div class='message success_message'>Pet Detail Updated Successfully!</div>";
     } else {
-        $message = "<div class='message success_message'>Error Updating The PetDetail</div>";
+        $message = "<div class='message error_message'>Error Updating The Pet Detail</div>";
     }
+    $stmt->close();
+
+    // Refresh pet data
+    $stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
+    $stmt->bind_param("i", $pet_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $pet = $result->fetch_assoc();
+    $stmt->close();
 }
 ?>
 <html>

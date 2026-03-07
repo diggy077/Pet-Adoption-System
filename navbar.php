@@ -5,11 +5,16 @@ $user = null;
 
 if (isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
-    $query = "SELECT full_name, email, phone_num, role FROM users WHERE id='$user_id'";
-    $result = mysqli_query($con, $query);
-    $user = mysqli_fetch_assoc($result);
-}
 
+    $stmt = $con->prepare("SELECT full_name, email, phone_num, role FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    $stmt->close();
+}
 ?>
 <html>
 

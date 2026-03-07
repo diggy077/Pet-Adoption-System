@@ -3,10 +3,11 @@ session_start();
 include('connection.php');
 include('navbar.php');
 
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
     exit();
 }
+$message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
@@ -20,21 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $image_name = $_FILES['image']['name'];
     $image_tmp = $_FILES['image']['tmp_name'];
-
     $upload_folder = "assets/images/";
 
     if (move_uploaded_file($image_tmp, $upload_folder . $image_name)) {
-
-        $sql = "INSERT INTO pets (name, age, gender, breed, price, image, category, description, weight) 
-                VALUES ('$name', '$age', '$gender', '$breed', '$price', '$image_name', '$category', '$description', '$weight')";
-
-        if (mysqli_query($con, $sql)) {
+        $stmt = $con->prepare("INSERT INTO pets (name, age, gender, breed, price, image, category, description, weight) 
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sissdssss", $name, $age, $gender, $breed, $price, $image_name, $category, $description, $weight);
+        if ($stmt->execute()) {
             $message = "<div class='message success_message'>New Pet Added Successfully!</div>";
         } else {
             $message = "<div class='message error_message'>Error Adding New Pet!</div>";
         }
+        $stmt->close();
+
     } else {
-        $message = "<div class='message error_message'>Error Adding New Pet!</div>";
+        $message = "<div class='message error_message'>Error Uploading Pet Image!</div>";
     }
 }
 ?>

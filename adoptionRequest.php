@@ -13,48 +13,51 @@ if (!isset($_GET['pet_id']) || empty($_GET['pet_id'])) {
     exit();
 }
 
-$pet_id = mysqli_real_escape_string($con, $_GET['pet_id']);
+$pet_id = intval($_GET['pet_id']);
 $user_id = $_SESSION['id'];
 
-$pet_query = "SELECT * FROM pets WHERE id = '$pet_id'";
-$pet_result = mysqli_query($con, $pet_query);
+$stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
+$stmt->bind_param("i", $pet_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$pet = $result->fetch_assoc();
+$stmt->close();
 
-if (!$pet_result || mysqli_num_rows($pet_result) == 0) {
+if (!$pet) {
     header("Location: browsePets.php");
     exit();
 }
-
-$pet = mysqli_fetch_assoc($pet_result);
 
 if ($pet['status'] != 'available') {
     header("Location: petDetails.php?id=$pet_id");
     exit();
 }
 
-$user_query = "SELECT * FROM users WHERE id = '$user_id'";
-$user_result = mysqli_query($con, $user_query);
-$user = mysqli_fetch_assoc($user_result);
+$stmt = $con->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
 
 $success_message = "";
 $error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $applicant_name = mysqli_real_escape_string($con, $_POST['full_name']);
-    $applicant_email = mysqli_real_escape_string($con, $_POST['email']);
-    $applicant_phone = mysqli_real_escape_string($con, $_POST['phone_num']);
-    
-    $reason = mysqli_real_escape_string($con, $_POST['reason']);
-    $has_experience = mysqli_real_escape_string($con, $_POST['has_experience']);
-    $experience_details = mysqli_real_escape_string($con, $_POST['experience_details']);
-    $housing_type = mysqli_real_escape_string($con, $_POST['housing_type']);
-    $has_space = mysqli_real_escape_string($con, $_POST['has_space']);
-    $has_other_pets = mysqli_real_escape_string($con, $_POST['has_other_pets']);
-    $other_pets_details = mysqli_real_escape_string($con, $_POST['other_pets_details']);
-    $commitment_confirmed = mysqli_real_escape_string($con, $_POST['commitment_confirmed']);
-    $additional_notes = mysqli_real_escape_string($con, $_POST['additional_notes']);
+    $applicant_name = $_POST['full_name'];
+    $applicant_email = $_POST['email'];
+    $applicant_phone = $_POST['phone_num'];
+    $reason = $_POST['reason'];
+    $has_experience = $_POST['has_experience'] ?? '';
+    $experience_details = $_POST['experience_details'] ?? '';
+    $housing_type = $_POST['housing_type'] ?? '';
+    $has_space = $_POST['has_space'] ?? '';
+    $has_other_pets = $_POST['has_other_pets'] ?? '';
+    $other_pets_details = $_POST['other_pets_details'] ?? '';
+    $commitment_confirmed = $_POST['commitment_confirmed'] ?? '';
+    $additional_notes = $_POST['additional_notes'] ?? '';
 
-    // Validation
     if (empty($applicant_name) || empty($applicant_email) || empty($applicant_phone)) {
         $error_message = "Please fill in all your personal information.";
     } elseif (empty($reason)) {
@@ -62,22 +65,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif ($commitment_confirmed != 'yes') {
         $error_message = "You must confirm your commitment to adopt this pet.";
     } else {
-        // Insert adoption request
-        $insert_query = "INSERT INTO adoption_requests 
+        $stmt = $con->prepare("INSERT INTO adoption_requests 
             (pet_id, user_id, reason, has_experience, experience_details, housing_type, 
             has_space, has_other_pets, other_pets_details, commitment_confirmed, additional_notes) 
-            VALUES 
-            ('$pet_id', '$user_id', '$reason', '$has_experience', '$experience_details', 
-            '$housing_type', '$has_space', '$has_other_pets', '$other_pets_details', 
-            '$commitment_confirmed', '$additional_notes')";
-
-        if (mysqli_query($con, $insert_query)) {
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param(
+            "iisssssssss",
+            $pet_id,
+            $user_id,
+            $reason,
+            $has_experience,
+            $experience_details,
+            $housing_type,
+            $has_space,
+            $has_other_pets,
+            $other_pets_details,
+            $commitment_confirmed,
+            $additional_notes
+        );
+        if ($stmt->execute()) {
             $success_message = "Your adoption request has been submitted successfully!";
-            // Optionally redirect after a few seconds
             header("refresh:3;url=browsePets.php");
         } else {
-            $error_message = "Error submitting request: " . mysqli_error($con);
+            $error_message = "Error submitting request: " . $stmt->error;
         }
+        $stmt->close();
     }
 }
 ?>

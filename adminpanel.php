@@ -3,7 +3,6 @@ session_start();
 include('connection.php');
 include('navbar.php');
 
-/* ---------- AUTH CHECK ---------- */
 if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'superadmin') {
     header("Location: login.php");
     exit();
@@ -13,50 +12,64 @@ $currentUserId = $_SESSION['id'];
 $message = '';
 $messageType = '';
 
-/* ---------- PROMOTE / DEMOTE ---------- */
 if (isset($_POST['action'])) {
 
     $userId = (int)$_POST['user_id'];
     $action = $_POST['action'];
 
     if ($action === 'promote') {
-        mysqli_query($con, "UPDATE users SET role='admin' WHERE id=$userId");
+        $stmt = $con->prepare("UPDATE users SET role = 'admin' WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->close();
+
         $message = "User successfully promoted to Shelter!";
         $messageType = "success";
     }
-
     if ($action === 'demote') {
-        mysqli_query($con, "UPDATE users SET role='user' WHERE id=$userId");
+        $stmt = $con->prepare("UPDATE users SET role = 'user' WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $stmt->close();
+
         $message = "User successfully demoted to Adopter!";
         $messageType = "success";
     }
 }
 
-/* ---------- FILTER ---------- */
 $roleFilter = isset($_GET['role']) ? $_GET['role'] : 'all';
 
-/* ---------- FETCH USERS ---------- */
-$sql = "SELECT id, full_name, email, role FROM users WHERE id != $currentUserId";
-
-if ($roleFilter !== 'all') {
-    $sql .= " AND role='$roleFilter'";
+if ($roleFilter === 'all') {
+    $stmt = $con->prepare("SELECT id, full_name, email, role 
+                           FROM users 
+                           WHERE id != ?
+                           ORDER BY id ASC");
+    $stmt->bind_param("i", $currentUserId);
+} else {
+    $stmt = $con->prepare("SELECT id, full_name, email, role 
+                           FROM users 
+                           WHERE id != ? AND role = ?
+                           ORDER BY id ASC");
+    $stmt->bind_param("is", $currentUserId, $roleFilter);
 }
 
-$sql .= " ORDER BY id ASC";
+$stmt->execute();
+$result = $stmt->get_result();
+$users = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
 
-$result = mysqli_query($con, $sql);
-$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-/* ---------- STATISTICS ---------- */
-$statsQuery = "
+$stmt = $con->prepare("
 SELECT 
     COUNT(*) AS total_users,
     SUM(role='user') AS total_adopters,
     SUM(role='admin') AS total_shelters,
     SUM(role='superadmin') AS total_superadmins
-FROM users";
+FROM users");
 
-$stats = mysqli_fetch_assoc(mysqli_query($con, $statsQuery));
+$stmt->execute();
+$statsResult = $stmt->get_result();
+$stats = $statsResult->fetch_assoc();
+$stmt->close();
 ?>
 
 <!DOCTYPE html>

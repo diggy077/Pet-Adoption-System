@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include("connection.php");
@@ -8,7 +7,6 @@ if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit();
 }
-
 $user_id = $_SESSION['id'];
 $user_role = $_SESSION['role'];
 
@@ -16,37 +14,49 @@ $success_message = "";
 $error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $user_role == 'admin') {
-    $request_id = mysqli_real_escape_string($con, $_POST['request_id']);
-    $new_status = mysqli_real_escape_string($con, $_POST['status']);
-    $remarks = mysqli_real_escape_string($con, $_POST['remarks']);
-    
-    $update_query = "UPDATE adoption_requests 
-                     SET status = '$new_status', remarks = '$remarks' 
-                     WHERE request_id = '$request_id'";
-    
-    if (mysqli_query($con, $update_query)) {
+
+    $request_id = $_POST['request_id'];
+    $new_status = $_POST['status'];
+    $remarks = $_POST['remarks'];
+
+    $stmt = $con->prepare("UPDATE adoption_requests 
+                           SET status = ?, remarks = ? 
+                           WHERE request_id = ?");
+    $stmt->bind_param("ssi", $new_status, $remarks, $request_id);
+
+    if ($stmt->execute()) {
         $success_message = "Request status updated successfully!";
     } else {
-        $error_message = "Error updating status: " . mysqli_error($con);
+        $error_message = "Error updating status: " . $stmt->error;
     }
+
+    $stmt->close();
 }
 
 if ($user_role == 'admin') {
-    $requests_query = "SELECT ar.*, p.name as pet_name, p.breed, p.image, p.category, 
-                              u.full_name as user_name, u.email as user_email, u.phone_num as user_phone
-                       FROM adoption_requests ar
-                       JOIN pets p ON ar.pet_id = p.id
-                       JOIN users u ON ar.user_id = u.id
-                       ORDER BY ar.created_at DESC";
-} else {
-    $requests_query = "SELECT ar.*, p.name as pet_name, p.breed, p.image, p.category
-                       FROM adoption_requests ar
-                       JOIN pets p ON ar.pet_id = p.id
-                       WHERE ar.user_id = '$user_id'
-                       ORDER BY ar.created_at DESC";
-}
 
-$requests_result = mysqli_query($con, $requests_query);
+    $stmt = $con->prepare("SELECT ar.*, 
+                                  p.name as pet_name, p.breed, p.image, p.category,
+                                  u.full_name as user_name, 
+                                  u.email as user_email, 
+                                  u.phone_num as user_phone
+                           FROM adoption_requests ar
+                           JOIN pets p ON ar.pet_id = p.id
+                           JOIN users u ON ar.user_id = u.id
+                           ORDER BY ar.created_at DESC");
+
+} else {
+    $stmt = $con->prepare("SELECT ar.*, 
+                                  p.name as pet_name, p.breed, p.image, p.category
+                           FROM adoption_requests ar
+                           JOIN pets p ON ar.pet_id = p.id
+                           WHERE ar.user_id = ?
+                           ORDER BY ar.created_at DESC");
+
+    $stmt->bind_param("i", $user_id);
+}
+$stmt->execute();
+$requests_result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>

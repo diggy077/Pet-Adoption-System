@@ -3,23 +3,21 @@ session_start();
 include("connection.php");
 include("navbar.php");
 
-// if (!isset($_SESSION['id'])) {
-//     header("Location: login.php");
-//     exit();
-// }
-
 if(isset($_SESSION['id'])){
-    $user_role=$_SESSION['role'];
-    $user_id=$_SESSION['id'];
+    $user_role = $_SESSION['role'];
+    $user_id = $_SESSION['id'];
 }
-    
-    $category_filter = "";
-    if (isset($_GET['category']) && !empty($_GET['category'])) {
-        $category = mysqli_real_escape_string($con, $_GET['category']);
-        $category_filter = "AND category = '$category'";
-    }
-    $pets_query = "SELECT * FROM pets WHERE status= 'available' $category_filter";
-    $pets_result = mysqli_query($con, $pets_query);
+$status = "available";
+if (isset($_GET['category']) && !empty($_GET['category'])) {
+    $category = $_GET['category'];
+    $stmt = $con->prepare("SELECT * FROM pets WHERE status = ? AND category = ?");
+    $stmt->bind_param("ss", $status, $category);
+} else {
+    $stmt = $con->prepare("SELECT * FROM pets WHERE status = ?");
+    $stmt->bind_param("s", $status);
+}
+$stmt->execute();
+$pets_result = $stmt->get_result();
 ?>
 
 <html>

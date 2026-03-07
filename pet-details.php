@@ -1,31 +1,32 @@
 <?php
-
 session_start();
-
 include("connection.php");
 include("navbar.php");
-    
+
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header("Location: browsePets.php");
     exit();
 }
 
-$pet_id = mysqli_real_escape_string($con, $_GET['id']);
+$pet_id = intval($_GET['id']); 
 
-if(isset($_SESSION['id'])){
-    $user_id = $_SESSION['id'];
-    $user_role = $_SESSION['role'];
-}
+$stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
+$stmt->bind_param("i", $pet_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$pet = $result->fetch_assoc();
+$stmt->close();
 
-$query = "SELECT * FROM pets WHERE id = '$pet_id'";
-$result = mysqli_query($con, $query);
-
-if (!$result || mysqli_num_rows($result) == 0) {
+if (!$pet) {
     header("Location: browsePets.php");
     exit();
 }
 
-$pet = mysqli_fetch_assoc($result);
+$user_role = null;
+if (isset($_SESSION['id'])) {
+    $user_id = $_SESSION['id'];
+    $user_role = $_SESSION['role'];
+}
 ?>
 
 <!DOCTYPE html>

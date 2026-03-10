@@ -56,7 +56,7 @@ if (isset($_SESSION['id'])) {
                 <?php if ($user): ?>
                     <a href="logout.php">Logout</a>
                 <?php else: ?>
-                    <a href="login.php">Login</a>
+                    <a href="login.php">Login or Register</a>
                 <?php endif; ?>
             </div>
         </div>

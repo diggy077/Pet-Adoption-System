@@ -2,27 +2,26 @@
 session_start();
 include("connection.php");
 include("navbar.php");
+include("includes/functions.php");
 
 if (!isset($_SESSION['id'])) {
     header("Location: login.php");
     exit();
 }
 
-$user_id = $_SESSION['id'];
+$user_id = sanitize_int($_SESSION['id']);
 
-// Prepared statement to fetch user data
 $stmt = $con->prepare("SELECT full_name, email, phone_num, role FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$user   = $result->fetch_assoc();
 $stmt->close();
 
-// Map role to readable text
 $role_map = [
     'superadmin' => 'Super Admin',
-    'admin' => 'Admin',
-    'user' => 'User'
+    'admin'      => 'Admin',
+    'user'       => 'User'
 ];
 
 $role_text = $role_map[$_SESSION['role']] ?? 'User';
@@ -30,7 +29,7 @@ $role_text = $role_map[$_SESSION['role']] ?? 'User';
 <html>
 <head>
     <title>My Profile | PetAdopt</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <main>
@@ -41,8 +40,8 @@ $role_text = $role_map[$_SESSION['role']] ?? 'User';
             <section class="profile-info-card">
                 <div class="profile-photo">🐾</div>
                 <div class="profile-details">
-                    <div class="profile-name"><?php echo htmlspecialchars($user['full_name']); ?></div>
-                    <div class="profile-role"><?php echo $role_text; ?></div>
+                    <div class="profile-name"><?php echo e($user['full_name']); ?></div>
+                    <div class="profile-role"><?php echo e($role_text); ?></div>
                 </div>
             </section>
             <section class="personal-info-section">
@@ -53,15 +52,15 @@ $role_text = $role_map[$_SESSION['role']] ?? 'User';
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">NAME</div>
-                        <div class="info-value"><?php echo htmlspecialchars($user['full_name']); ?></div>
+                        <div class="info-value"><?php echo e($user['full_name']); ?></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">EMAIL</div>
-                        <div class="info-value"><?php echo htmlspecialchars($user['email']); ?></div>
+                        <div class="info-value"><?php echo e($user['email']); ?></div>
                     </div>
                     <div class="info-item">
                         <div class="info-label">PHONE NUMBER</div>
-                        <div class="info-value"><?php echo htmlspecialchars($user['phone_num']); ?></div>
+                        <div class="info-value"><?php echo e($user['phone_num']); ?></div>
                     </div>
                 </div>
             </section>

@@ -1,27 +1,57 @@
 <?php
 session_start();
 include("connection.php");
+include("includes/functions.php");
+
 $error_message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $full_name = $_POST["full_name"];
-    $email = $_POST["email"];
-    $phone = $_POST["phone"];
-    $password = $_POST["password"];
+    $full_name = sanitize_string($_POST["full_name"]);
+    $email     = $_POST["email"];
+    $phone     = $_POST["phone"];
+    $password  = $_POST["password"];
     $Cpassword = $_POST["Cpassword"];
 
-    if ($password == $Cpassword) {
+    if (empty($full_name) || empty($email) || empty($phone) || empty($password) || empty($Cpassword)) {
+        $error_message = "All fields are required.";
+    }
+
+    if (empty($error_message)) {
+        if (!preg_match('/^(98|97)\d{8}$/', $phone)) {
+            $error_message = "Phone number must be a valid 10-digit starting with 98 or 97.";
+        }
+    }
+
+    if (empty($error_message)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error_message = "Enter a valid email address.";
+        }
+    }
+
+    if (empty($error_message)) {
+        if (strlen($password) < 8) {
+            $error_message = "Password must be at least 8 characters.";
+        } else if ($password !== $Cpassword) {
+            $error_message = "Passwords do not match.";
+        }
+    }
+
+    if (empty($error_message)) {
+        $email           = sanitize_email($email);
+        $phone           = sanitize_phone($phone);
+        $hashed_password = hash_password($password);
+
         $stmt = $con->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
+
         if ($result->num_rows > 0) {
             $error_message = "User already exists!";
         } else {
-
             $stmt = $con->prepare("INSERT INTO users (full_name, email, password, phone_num) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $full_name, $email, $password, $phone);
+            $stmt->bind_param("ssss", $full_name, $email, $hashed_password, $phone);
 
             if ($stmt->execute()) {
                 header("Location: login.php");
@@ -31,8 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             }
         }
         $stmt->close();
-    } else {
-        $error_message = "Passwords do not match!";
     }
 }
 ?>
@@ -65,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 <h2 class="login-title">Pet Adoption System</h2>
 
-                <?php if (!empty($error_message)): ?>
-                    <div class="error-message">
-                        <?php echo $error_message; ?>
-                    </div>
-                <?php endif; ?>
+                <?php
+                if (!empty($error_message)) {
+                    echo '<div class="error-message">' . e($error_message) . '</div>';
+                }
+                ?>
 
                 <p class="login-select">Sign Up</p>
 
@@ -77,40 +105,28 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                     <div class="input-group">
                         <label for="full_name">Full Name</label>
-                        <input type="text" id="full_name" name="full_name"
-                            placeholder="Enter your full name"
-                            pattern="[A-Za-z\s]{3,50}"
-                            title="Name should contain only letters and spaces"
-                            required>
+                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name">
                     </div>
 
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email"
-                            placeholder="Enter your email"
-                            pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/"
-                            title="Enter a valid email address"
-                            required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
                     </div>
 
                     <div class="input-group">
                         <label for="phone">Contact Number</label>
-                        <input type="tel" id="phone" name="phone"
-                            placeholder="Enter your contact number"
-                            pattern="^(98|97)[0-9]{8}$"
-                            title="Phone number must be 10 digits and start with 98 or 97"
-                            required>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your contact number">
                     </div>
 
                     <div class="input-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
                         <small id="strengthMessage"></small>
                     </div>
 
                     <div class="input-group">
                         <label for="Cpassword">Confirm Password</label>
-                        <input type="password" id="Cpassword" name="Cpassword" placeholder="Re-enter your password" required>
+                        <input type="password" id="Cpassword" name="Cpassword" placeholder="Re-enter your password">
                     </div>
 
                     <button type="submit" class="login-submit">Register</button>

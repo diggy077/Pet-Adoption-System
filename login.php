@@ -1,35 +1,51 @@
 <?php
 session_start();
 include("connection.php");
+include("includes/functions.php");
+
 $error_message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"];
+
+    $email    = $_POST["email"];
     $password = $_POST["password"];
-    $stmt = $con->prepare("SELECT id, full_name, role, password FROM users WHERE email = ?");
-    
-    $stmt->bind_param("s", $email);
 
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $res = $result->fetch_assoc();
-        if ($password === $res['password']) {
-
-            $_SESSION['id'] = $res['id'];
-            $_SESSION['full_name'] = $res['full_name'];
-            $_SESSION['role'] = $res['role'];
-
-            header("Location: user.php");
-            exit;
-        } else {
-            $error_message = "Invalid Email or Password";
-        }
-    } else {
-        $error_message = "User Does Not Exist!";
+    if (empty($email) || empty($password)) {
+        $error_message = "All fields are required.";
     }
-    $stmt->close();
+
+    if (empty($error_message)) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error_message = "Enter a valid email address.";
+        }
+    }
+
+    if (empty($error_message)) {
+        $email = sanitize_email($email);
+
+        $stmt = $con->prepare("SELECT id, full_name, role, password FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $res = $result->fetch_assoc();
+
+            if (verify_password($password, $res['password'])) {
+                $_SESSION['id']        = $res['id'];
+                $_SESSION['full_name'] = $res['full_name'];
+                $_SESSION['role']      = $res['role'];
+
+                header("Location: user.php");
+                exit;
+            } else {
+                $error_message = "Invalid Email or Password.";
+            }
+        } else {
+            $error_message = "User does not exist.";
+        }
+        $stmt->close();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -65,27 +81,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2 class="login-title">Pet Adoption System</h2>
 
                 <form method="POST" action="login.php">
-                    
+
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" id="email" name="email" placeholder="Enter your email">
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <input type="password" id="password" name="password" placeholder="Enter your password">
                     </div>
-                    
-                    <?php if (!empty($error_message)) { ?>
-                        <div class="error-message">
-                            <?php echo $error_message; ?>
-                        </div>
-                    <?php } ?><br>
+
+                    <?php
+                    if (!empty($error_message)) {
+                        echo '<div class="error-message">' . e($error_message) . '</div>';
+                    }
+                    ?><br>
 
                     <!-- <div class="forgot-password">
                         <a href="forgot-password.php">Forgot Password?</a>
                     </div> -->
-                    
+
                     <button type="submit" class="login-submit">Login</button>
                 </form>
 

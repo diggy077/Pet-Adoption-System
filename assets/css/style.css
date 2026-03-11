@@ -605,6 +605,47 @@ main {
   text-align: right;
 }
 
+#categoryModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+#categoryModalContent {
+  background: white;
+  padding: 25px;
+  margin: 150px auto;
+  width: 320px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#categoryModalContent input {
+  width: 90%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+#saveCategoryBtn {
+  background-color: #2b4660;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+}
+
+#cancelCategoryBtn {
+  background-color: #ccc;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+}
+
 #deleteModal {
   display: none;
   position: fixed;

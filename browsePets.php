@@ -11,17 +11,66 @@ if (isset($_SESSION['id'])) {
 
 $status = "available";
 
+$params = [];
+$types   = "";
+$sql     = "SELECT * FROM pets WHERE status = ?";
+$params[] = $status;
+$types   .= "s";
+
+// If admin, only show their pets
+if (isset($user_role) && $user_role === 'admin') {
+    $sql .= " AND admin_id = ?";
+    $params[] = $user_id;
+    $types .= "i";
+}
+
+// Filter by category if selected
 if (isset($_GET['category']) && !empty($_GET['category'])) {
     $category = sanitize_string($_GET['category']);
-    $stmt = $con->prepare("SELECT * FROM pets WHERE status = ? AND category = ?");
-    $stmt->bind_param("ss", $status, $category);
-} else {
-    $stmt = $con->prepare("SELECT * FROM pets WHERE status = ?");
-    $stmt->bind_param("s", $status);
+    $sql .= " AND category = ?";
+    $params[] = $category;
+    $types .= "s";
 }
+
+// Prepare and bind dynamically
+$stmt = $con->prepare($sql);
+
+// Dynamically bind parameters
+$stmt->bind_param($types, ...$params);
 
 $stmt->execute();
 $pets_result = $stmt->get_result();
+
+$stmt->execute();
+$pets_result = $stmt->get_result();
+
+if (isset($_POST['add_category'])) {
+
+    $new_category = strtolower(sanitize_string($_POST['category_name']));
+
+    $result = $con->query("SHOW COLUMNS FROM pets LIKE 'category'");
+    $row = $result->fetch_assoc();
+
+    preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
+    $enum_values = str_getcsv($matches[1], ',', "'");
+
+    if (!in_array($new_category, $enum_values)) {
+
+        $enum_values[] = $new_category;
+
+        $enum_string = "'" . implode("','", $enum_values) . "'";
+
+        $alter_query = "ALTER TABLE pets MODIFY category ENUM($enum_string)";
+
+        if ($con->query($alter_query)) {
+            $success_message = "Category added successfully!";
+        } else {
+            $error_message = "Failed to add category.";
+        }
+    } else {
+        $error_message = "Category already exists.";
+    }
+}
 ?>
 
 <html>
@@ -33,25 +82,62 @@ $pets_result = $stmt->get_result();
 </head>
 
 <body>
+    <?php
+    if (!empty($success_message)) {
+        echo '<div class="success-message">' . e($success_message) . '</div>';
+    }
+
+    if (!empty($error_message)) {
+        echo '<div class="error-message">' . e($error_message) . '</div>';
+    }
+    ?>
     <div class="browse-container">
 
         <div class="browse-header">
-            <h1>🐾 Browse All Pets</h1>
-            <p>Find your perfect companion from our list of adorable pets available for adoption.</p>
+            <?php if($_SESSION['role']=="user"){ ?>
+
+                <h1>🐾 Browse All Pets</h1>
+                <p>Find your perfect companion from our list of adorable pets available for adoption.</p>
+                <?php } else {?>
+                                <h1>🐾 Your Pets</h1>
+                <?php } ?>
+
+
 
             <form method="GET" action="browsePets.php" class="category-form">
                 <label for="category" style="font-size:1.1rem; font-weight:bold; color:#2b4660;">Category:</label>
                 <select name="category" id="category" onchange="this.form.submit()">
                     <option value="">All</option>
-                    <option value="Dog" <?php if (isset($_GET['category']) && $_GET['category'] == 'Dog') echo 'selected'; ?>>Dog</option>
-                    <option value="Cat" <?php if (isset($_GET['category']) && $_GET['category'] == 'Cat') echo 'selected'; ?>>Cat</option>
-                    <option value="Rabbit" <?php if (isset($_GET['category']) && $_GET['category'] == 'Rabbit') echo 'selected'; ?>>Rabbit</option>
+
+                    <?php
+                    // Get ENUM values from pets.category column
+                    $result = $con->query("SHOW COLUMNS FROM pets LIKE 'category'");
+                    $row = $result->fetch_assoc();
+
+                    preg_match("/^enum\((.*)\)$/", $row['Type'], $matches);
+                    $categories = str_getcsv($matches[1], ',', "'");
+
+                    foreach ($categories as $cat) {
+
+                        $selected = "";
+                        if (isset($_GET['category']) && strtolower($_GET['category']) == $cat) {
+                            $selected = "selected";
+                        }
+
+                        echo "<option value='$cat' $selected>" . ucfirst($cat) . "</option>";
+                    }
+                    ?>
+
                 </select>
             </form>
 
             <?php
             if (isset($user_role) && $user_role === 'admin') {
-                echo '<div class="addpet-option"><a href="addPet.php" class="adopt-btn">➕ Add New Pet</a></div>';
+                echo '
+    <div class="admin-options">
+        <button class="adopt-btn" onclick="openCategoryModal()">📂 Add Category</button>
+        <a href="addPet.php" class="adopt-btn">➕ Add New Pet</a>
+    </div>';
             }
             ?>
         </div>
@@ -84,6 +170,23 @@ $pets_result = $stmt->get_result();
         </div>
     </div>
 
+    <div id="categoryModal">
+        <div id="categoryModalContent">
+
+            <h3>Add Pet Category</h3>
+
+            <form method="POST" action="">
+                <input type="text" name="category_name" placeholder="Enter category name" required>
+
+                <div style="margin-top:15px;">
+                    <button type="submit" name="add_category" id="saveCategoryBtn">Add</button>
+                    <button type="button" id="cancelCategoryBtn" onclick="closeCategoryModal()">Cancel</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
     <div id="deleteModal">
         <div id="deleteModalContent">
             <p>Are you sure you want to delete this pet?</p>
@@ -93,6 +196,24 @@ $pets_result = $stmt->get_result();
     </div>
 
     <script>
+        function openCategoryModal() {
+            document.getElementById("categoryModal").style.display = "block";
+        }
+
+        function closeCategoryModal() {
+            document.getElementById("categoryModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+
+            const categoryModal = document.getElementById("categoryModal");
+
+            if (event.target === categoryModal) {
+                categoryModal.style.display = "none";
+            }
+
+        }
+
         function openDeleteModal(petId) {
             document.getElementById('deleteModal').style.display = 'block';
             document.getElementById('confirmDelete').href = 'deletePet.php?id=' + petId;

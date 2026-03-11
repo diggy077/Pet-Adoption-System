@@ -3,8 +3,6 @@ session_start();
 include("connection.php");
 include("includes/functions.php");
 
-$error_message = "";
-
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $full_name = sanitize_string($_POST["full_name"]);
@@ -13,55 +11,84 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $password  = $_POST["password"];
     $Cpassword = $_POST["Cpassword"];
 
+    // Store form data in session so fields repopulate on error
+    $_SESSION['form_data'] = [
+        'full_name' => $full_name,
+        'email'     => $email,
+        'phone'     => $phone,
+    ];
+
     if (empty($full_name) || empty($email) || empty($phone) || empty($password) || empty($Cpassword)) {
-        $error_message = "All fields are required.";
+        $_SESSION['error_message'] = "All fields are required.";
+        header("Location: register.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        if (!preg_match('/^(98|97)\d{8}$/', $phone)) {
-            $error_message = "Phone number must be a valid 10-digit starting with 98 or 97.";
-        }
+    if (!preg_match('/^(98|97)\d{8}$/', $phone)) {
+        $_SESSION['error_message'] = "Phone number must be a valid 10-digit starting with 98 or 97.";
+        header("Location: register.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error_message = "Enter a valid email address.";
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error_message'] = "Enter a valid email address.";
+        header("Location: register.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        if (strlen($password) < 8) {
-            $error_message = "Password must be at least 8 characters.";
-        } else if ($password !== $Cpassword) {
-            $error_message = "Passwords do not match.";
-        }
+    if (strlen($password) < 8) {
+        $_SESSION['error_message'] = "Password must be at least 8 characters.";
+        header("Location: register.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        $email           = sanitize_email($email);
-        $phone           = sanitize_phone($phone);
-        $hashed_password = hash_password($password);
+    if ($password !== $Cpassword) {
+        $_SESSION['error_message'] = "Passwords do not match.";
+        header("Location: register.php");
+        exit;
+    }
 
-        $stmt = $con->prepare("SELECT id FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $email           = sanitize_email($email);
+    $phone           = sanitize_phone($phone);
+    $hashed_password = hash_password($password);
 
-        if ($result->num_rows > 0) {
-            $error_message = "User already exists!";
-        } else {
-            $stmt = $con->prepare("INSERT INTO users (full_name, email, password, phone_num) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $full_name, $email, $hashed_password, $phone);
+    $stmt = $con->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-            if ($stmt->execute()) {
-                header("Location: login.php");
-                exit;
-            } else {
-                $error_message = "Error occurred while registering.";
-            }
-        }
+    if ($result->num_rows > 0) {
+        $_SESSION['error_message'] = "User already exists!";
+        header("Location: register.php");
+        exit;
+    }
+
+    $stmt = $con->prepare("INSERT INTO users (full_name, email, password, phone_num) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $full_name, $email, $hashed_password, $phone);
+
+    if ($stmt->execute()) {
         $stmt->close();
+        unset($_SESSION['form_data']);
+        header("Location: login.php");
+        exit;
+    } else {
+        $_SESSION['error_message'] = "Error occurred while registering.";
+        $stmt->close();
+        header("Location: register.php");
+        exit;
     }
+}
+
+$error_message = "";
+if (!empty($_SESSION['error_message'])) {
+    $error_message = $_SESSION['error_message'];
+    unset($_SESSION['error_message']);
+}
+
+$form_data = [];
+if (!empty($_SESSION['form_data'])) {
+    $form_data = $_SESSION['form_data'];
+    unset($_SESSION['form_data']);
 }
 ?>
 <!DOCTYPE html>
@@ -101,21 +128,24 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 <p class="login-select">Sign Up</p>
 
-                <form method="POST" action="">
+                <form method="POST" action="register.php">
 
                     <div class="input-group">
                         <label for="full_name">Full Name</label>
-                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name">
+                        <input type="text" id="full_name" name="full_name" placeholder="Enter your full name"
+                            value="<?php echo !empty($form_data['full_name']) ? e($form_data['full_name']) : ''; ?>">
                     </div>
 
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email">
+                        <input type="email" id="email" name="email" placeholder="Enter your email"
+                            value="<?php echo !empty($form_data['email']) ? e($form_data['email']) : ''; ?>">
                     </div>
 
                     <div class="input-group">
                         <label for="phone">Contact Number</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your contact number">
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your contact number"
+                            value="<?php echo !empty($form_data['phone']) ? e($form_data['phone']) : ''; ?>">
                     </div>
 
                     <div class="input-group">

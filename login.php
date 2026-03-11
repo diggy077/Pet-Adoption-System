@@ -3,49 +3,69 @@ session_start();
 include("connection.php");
 include("includes/functions.php");
 
-$error_message = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email    = $_POST["email"];
     $password = $_POST["password"];
 
+    // Store only email in session (never password)
+    $_SESSION['form_data'] = [
+        'email' => $email
+    ];
+
     if (empty($email) || empty($password)) {
-        $error_message = "All fields are required.";
+        $_SESSION['error_message'] = "All fields are required.";
+        header("Location: login.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error_message = "Enter a valid email address.";
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error_message'] = "Enter a valid email address.";
+        header("Location: login.php");
+        exit;
     }
 
-    if (empty($error_message)) {
-        $email = sanitize_email($email);
+    $email = sanitize_email($email);
 
-        $stmt = $con->prepare("SELECT id, full_name, role, password FROM users WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $stmt = $con->prepare("SELECT id, full_name, role, password FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            $res = $result->fetch_assoc();
+    if ($result->num_rows > 0) {
+        $res = $result->fetch_assoc();
 
-            if (verify_password($password, $res['password'])) {
-                $_SESSION['id']        = $res['id'];
-                $_SESSION['full_name'] = $res['full_name'];
-                $_SESSION['role']      = $res['role'];
+        if (verify_password($password, $res['password'])) {
+            unset($_SESSION['form_data']);
+            $_SESSION['id']        = $res['id'];
+            $_SESSION['full_name'] = $res['full_name'];
+            $_SESSION['role']      = $res['role'];
 
-                header("Location: user.php");
-                exit;
-            } else {
-                $error_message = "Invalid Email or Password.";
-            }
+            header("Location: user.php");
+            exit;
         } else {
-            $error_message = "User does not exist.";
+            $_SESSION['error_message'] = "Invalid Email or Password.";
+            header("Location: login.php");
+            exit;
         }
-        $stmt->close();
+    } else {
+        $_SESSION['error_message'] = "Invalid Email or Password.";
+        header("Location: login.php");
+        exit;
     }
+    $stmt->close();
+}
+
+$error_message = "";
+if (!empty($_SESSION['error_message'])) {
+    $error_message = $_SESSION['error_message'];
+    unset($_SESSION['error_message']);
+}
+
+$form_data = [];
+if (!empty($_SESSION['form_data'])) {
+    $form_data = $_SESSION['form_data'];
+    unset($_SESSION['form_data']);
 }
 ?>
 <!DOCTYPE html>
@@ -84,7 +104,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <div class="input-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Enter your email">
+                        <input type="email" id="email" name="email" placeholder="Enter your email"
+                            value="<?php echo !empty($form_data['email']) ? e($form_data['email']) : ''; ?>">
                     </div>
 
                     <div class="input-group">

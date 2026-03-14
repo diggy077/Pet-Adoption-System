@@ -94,13 +94,16 @@ if (isset($_POST['add_category'])) {
     <div class="browse-container">
 
         <div class="browse-header">
-            <?php if($_SESSION['role']=="user"){ ?>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
+
+                <h1>🐾 Your Pets</h1>
+
+            <?php } else { ?>
 
                 <h1>🐾 Browse All Pets</h1>
                 <p>Find your perfect companion from our list of adorable pets available for adoption.</p>
-                <?php } else {?>
-                                <h1>🐾 Your Pets</h1>
-                <?php } ?>
+
+            <?php } ?>
 
 
 

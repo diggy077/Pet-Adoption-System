@@ -191,8 +191,8 @@ if (isset($_SESSION['id'])) {
             </div>
 >>>>>>> 1e7ff2256c317eb1e18f01eb1ab0dab82d699111
 
+            </div>
         </div>
-    </div>
 
     <?php
     if ($user_role === 'admin') {

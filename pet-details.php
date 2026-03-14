@@ -11,7 +11,14 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $pet_id = sanitize_int($_GET['id']);
 
-$stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
+/* FETCH PET + SHELTER DETAILS */
+$stmt = $con->prepare("
+    SELECT pets.*, users.full_name, users.email, users.phone_num
+    FROM pets
+    LEFT JOIN users ON pets.admin_id = users.id
+    WHERE pets.id = ?
+");
+
 $stmt->bind_param("i", $pet_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -41,6 +48,7 @@ if (isset($_SESSION['id'])) {
 </head>
 
 <body>
+<<<<<<< HEAD
     <div class="pet-details-wrapper">
         <div class="pet-hero-section">
             <img src="assets/images/<?php echo e($pet['image'] ?? 'default_pet.jpg'); ?>" alt="<?php echo e($pet['name']); ?>">
@@ -101,9 +109,11 @@ if (isset($_SESSION['id'])) {
                             </span>
                         </div>
                     </div>
+
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div class="pet-actions">
 
                 <?php
@@ -142,8 +152,45 @@ if (isset($_SESSION['id'])) {
                           </button>';
                 }
                 ?>
+=======
 
+            <!-- SHELTER CONTACT -->
+            <div class="additional-info-section">
+                <h2><i class="fas fa-home"></i> Shelter Contact</h2>
+
+                <div class="info-grid-details">
+
+                    <!-- <div class="info-detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-user"></i> Shelter Name
+                        </span>
+                        <span class="detail-value">
+                            <?php echo htmlspecialchars($pet['full_name'] ?? 'Unknown'); ?>
+                        </span>
+                    </div> -->
+
+                    <div class="info-detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </span>
+                        <span class="detail-value">
+                            <?php echo htmlspecialchars($pet['email'] ?? 'N/A'); ?>
+                        </span>
+                    </div>
+
+                    <div class="info-detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-phone"></i> Contact Number
+                        </span>
+                        <span class="detail-value">
+                            <?php echo htmlspecialchars($pet['phone_num'] ?? 'N/A'); ?>
+                        </span>
+                    </div>
+
+                </div>
             </div>
+>>>>>>> 1e7ff2256c317eb1e18f01eb1ab0dab82d699111
+
         </div>
     </div>
 
@@ -156,8 +203,10 @@ if (isset($_SESSION['id'])) {
             <a id="confirmDelete" href=""><button id="deleteBtn">Delete</button></a>
             <button id="cancelBtn" onclick="closeDeleteModal()">Cancel</button>
         </div>
+
     </div>
 
+<<<<<<< HEAD
     <script>
         function openDeleteModal(petId) {
             document.getElementById("deleteModal").style.display = "block";
@@ -170,7 +219,54 @@ if (isset($_SESSION['id'])) {
     </script>';
     }
     ?>
+=======
+</div>
+
+
+<?php 
+if (isset($user_role) && $user_role == 'admin') {
+?>
+
+<div id="deleteModal">
+
+    <div id="deleteModalContent">
+        <p>Are you sure you want to delete <?php echo htmlspecialchars($pet['name']); ?>?</p>
+
+        <a id="confirmDelete" href="">
+            <button id="deleteBtn">Delete</button>
+        </a>
+
+        <button id="cancelBtn" onclick="closeDeleteModal()">Cancel</button>
+    </div>
+
+</div>
+
+
+<script>
+
+function openDeleteModal(petId) {
+
+    document.getElementById('deleteModal').style.display = 'block';
+    document.getElementById('confirmDelete').href = 'deletePet.php?id=' + petId;
+
+}
+
+function closeDeleteModal() {
+
+    document.getElementById('deleteModal').style.display = 'none';
+
+}
+
+</script>
+
+<?php 
+}
+?>
+
+
+>>>>>>> 1e7ff2256c317eb1e18f01eb1ab0dab82d699111
 </body>
 
 <?php include("footer.php"); ?>
+
 </html>

@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $password  = $_POST["password"];
     $Cpassword = $_POST["Cpassword"];
 
-    // Store form data in session so fields repopulate on error
     $_SESSION['form_data'] = [
         'full_name' => $full_name,
         'email'     => $email,
@@ -24,6 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         exit;
     }
 
+    if (!preg_match("/^[a-zA-Z\s'\-]+$/", $full_name)) {
+        $_SESSION['error_message'] = "Full name must contain letters only, no numbers or special characters.";
+        header("Location: register.php");
+        exit;
+    }
+
     if (!preg_match('/^(98|97)\d{8}$/', $phone)) {
         $_SESSION['error_message'] = "Phone number must be a valid 10-digit starting with 98 or 97.";
         header("Location: register.php");
@@ -32,6 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error_message'] = "Enter a valid email address.";
+        header("Location: register.php");
+        exit;
+    }
+
+    $email_local = explode('@', $email)[0];
+    if (!preg_match('/[a-zA-Z]/', $email_local)) {
+        $_SESSION['error_message'] = "Email must contain at least one letter.";
         header("Location: register.php");
         exit;
     }
@@ -79,17 +91,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     }
 }
 
+// Pick up error and form data from session then clear them
 $error_message = "";
 if (!empty($_SESSION['error_message'])) {
     $error_message = $_SESSION['error_message'];
     unset($_SESSION['error_message']);
 }
 
-$form_data = [];
-if (!empty($_SESSION['form_data'])) {
-    $form_data = $_SESSION['form_data'];
-    unset($_SESSION['form_data']);
-}
+// Keep form_data in session until user submits again or succeeds
+$form_data = $_SESSION['form_data'] ?? [];
 ?>
 <!DOCTYPE html>
 <html lang="en">

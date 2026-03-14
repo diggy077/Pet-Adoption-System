@@ -29,26 +29,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $new_password     = $_POST['password'];
     $confirm_password = $_POST['password1'];
 
-    // Block 1 - required fields
     if (empty($full_name) || empty($phone_num) || empty($current_password)) {
         $error = "Full name, phone number and current password are required.";
     }
 
-    // Block 2 - validate phone format
+    if (empty($error)) {
+        if (!preg_match("/^[a-zA-Z\s'\-]+$/", $full_name)) {
+            $error = "Full name must contain letters only, no numbers or special characters.";
+        }
+    }
+
     if (empty($error)) {
         if (!preg_match('/^(98|97)\d{8}$/', $phone_num)) {
             $error = "Phone number must be a valid 10-digit Nepali number starting with 98 or 97.";
         }
     }
 
-    // Block 3 - verify current password always
     if (empty($error)) {
         if (!verify_password($current_password, $user['password'])) {
             $error = "Current password is incorrect.";
         }
     }
 
-    // Block 4 - validate new password only if provided
     if (empty($error)) {
         if (!empty($new_password) || !empty($confirm_password)) {
             if (strlen($new_password) < 8) {
@@ -59,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    // Block 5 - update DB
     if (empty($error)) {
         if (!empty($new_password)) {
             $hashed_password = hash_password($new_password);

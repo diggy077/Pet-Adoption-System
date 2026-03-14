@@ -42,6 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    if (!preg_match("/^[a-zA-Z\s'\-]+$/", $name)) {
+        $_SESSION['error_message'] = "Pet name must contain letters only, no numbers or special characters.";
+        header("Location: addPet.php");
+        exit;
+    }
+
     if ($age <= 0) {
         $_SESSION['error_message'] = "Age must be a positive number.";
         header("Location: addPet.php");
@@ -83,6 +89,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!in_array($ext, $allowed_ext)) {
         $_SESSION['error_message'] = "Image must be a jpg, jpeg, png, gif, or webp file.";
+        header("Location: addPet.php");
+        exit;
+    }
+
+    if (file_exists($upload_folder . $image_name)) {
+        $_SESSION['error_message'] = "An image with that filename already exists. Please rename your image and try again.";
         header("Location: addPet.php");
         exit;
     }

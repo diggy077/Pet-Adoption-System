@@ -42,19 +42,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $category    = sanitize_string($_POST['category']);
     $description = sanitize_text($_POST['description']);
 
-    // Block 1 - all fields required
     if (empty($name) || empty($age) || empty($gender) || empty($breed) || empty($price) || empty($weight) || empty($category) || empty($description)) {
         $message = "<div class='message error_message'>All fields are required.</div>";
     }
 
-    // Block 2 - age must be positive
+    if (empty($message)) {
+        if (!preg_match("/^[a-zA-Z\s'\-]+$/", $name)) {
+            $message = "<div class='message error_message'>Pet name must contain letters only, no numbers or special characters.</div>";
+        }
+    }
+
     if (empty($message)) {
         if ($age <= 0) {
             $message = "<div class='message error_message'>Age must be a positive number.</div>";
         }
     }
 
-    // Block 3 - price cannot be negative or zero
     if (empty($message)) {
         if ($price < 0) {
             $message = "<div class='message error_message'>Price cannot be negative.</div>";
@@ -63,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    // Block 4 - handle image (optional on edit)
     if (empty($message)) {
         $stmt = $con->prepare("SELECT image FROM pets WHERE id = ?");
         $stmt->bind_param("i", $pet_id);
@@ -96,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     }
 
-    // Block 5 - update DB
     if (empty($message)) {
         $stmt = $con->prepare("UPDATE pets SET 
                                 name = ?, 
@@ -118,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
         $stmt->close();
 
-        // Refresh pet data
         $stmt = $con->prepare("SELECT * FROM pets WHERE id = ?");
         $stmt->bind_param("i", $pet_id);
         $stmt->execute();

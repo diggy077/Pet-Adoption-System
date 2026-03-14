@@ -48,7 +48,6 @@ if (isset($_SESSION['id'])) {
 </head>
 
 <body>
-<<<<<<< HEAD
     <div class="pet-details-wrapper">
         <div class="pet-hero-section">
             <img src="assets/images/<?php echo e($pet['image'] ?? 'default_pet.jpg'); ?>" alt="<?php echo e($pet['name']); ?>">
@@ -109,11 +108,44 @@ if (isset($_SESSION['id'])) {
                             </span>
                         </div>
                     </div>
+                </div>
 
+                <div class="additional-info-section">
+                    <h2><i class="fas fa-home"></i> Shelter Contact</h2>
+
+                    <div class="info-grid-details">
+
+                        <!-- <div class="info-detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-user"></i> Shelter Name
+                        </span>
+                        <span class="detail-value">
+                            <?php echo htmlspecialchars($pet['full_name'] ?? 'Unknown'); ?>
+                        </span>
+                    </div> -->
+
+                        <div class="info-detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-envelope"></i> Email
+                            </span>
+                            <span class="detail-value">
+                                <?php echo htmlspecialchars($pet['email'] ?? 'N/A'); ?>
+                            </span>
+                        </div>
+
+                        <div class="info-detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-phone"></i> Contact Number
+                            </span>
+                            <span class="detail-value">
+                                <?php echo htmlspecialchars($pet['phone_num'] ?? 'N/A'); ?>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-<<<<<<< HEAD
+
             <div class="pet-actions">
 
                 <?php
@@ -152,51 +184,12 @@ if (isset($_SESSION['id'])) {
                           </button>';
                 }
                 ?>
-=======
-
-            <!-- SHELTER CONTACT -->
-            <div class="additional-info-section">
-                <h2><i class="fas fa-home"></i> Shelter Contact</h2>
-
-                <div class="info-grid-details">
-
-                    <!-- <div class="info-detail-item">
-                        <span class="detail-label">
-                            <i class="fas fa-user"></i> Shelter Name
-                        </span>
-                        <span class="detail-value">
-                            <?php echo htmlspecialchars($pet['full_name'] ?? 'Unknown'); ?>
-                        </span>
-                    </div> -->
-
-                    <div class="info-detail-item">
-                        <span class="detail-label">
-                            <i class="fas fa-envelope"></i> Email
-                        </span>
-                        <span class="detail-value">
-                            <?php echo htmlspecialchars($pet['email'] ?? 'N/A'); ?>
-                        </span>
-                    </div>
-
-                    <div class="info-detail-item">
-                        <span class="detail-label">
-                            <i class="fas fa-phone"></i> Contact Number
-                        </span>
-                        <span class="detail-value">
-                            <?php echo htmlspecialchars($pet['phone_num'] ?? 'N/A'); ?>
-                        </span>
-                    </div>
-
-                </div>
-            </div>
->>>>>>> 1e7ff2256c317eb1e18f01eb1ab0dab82d699111
-
             </div>
         </div>
 
-    <?php
-    if ($user_role === 'admin') {
-        echo '
+        <?php
+        if ($user_role === 'admin') {
+            echo '
     <div id="deleteModal">
         <div id="deleteModalContent">
             <p>Are you sure you want to delete ' . e($pet['name']) . '?</p>
@@ -217,54 +210,50 @@ if (isset($_SESSION['id'])) {
             document.getElementById("deleteModal").style.display = "none";
         }
     </script>';
-    }
-    ?>
-=======
-</div>
-
-
-<?php 
-if (isset($user_role) && $user_role == 'admin') {
-?>
-
-<div id="deleteModal">
-
-    <div id="deleteModalContent">
-        <p>Are you sure you want to delete <?php echo htmlspecialchars($pet['name']); ?>?</p>
-
-        <a id="confirmDelete" href="">
-            <button id="deleteBtn">Delete</button>
-        </a>
-
-        <button id="cancelBtn" onclick="closeDeleteModal()">Cancel</button>
+        }
+        ?>
     </div>
 
-</div>
+
+    <?php
+    if (isset($user_role) && $user_role == 'admin') {
+    ?>
+
+        <div id="deleteModal">
+
+            <div id="deleteModalContent">
+                <p>Are you sure you want to delete <?php echo htmlspecialchars($pet['name']); ?>?</p>
+
+                <a id="confirmDelete" href="">
+                    <button id="deleteBtn">Delete</button>
+                </a>
+
+                <button id="cancelBtn" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+
+        </div>
 
 
-<script>
+        <script>
+            function openDeleteModal(petId) {
 
-function openDeleteModal(petId) {
+                document.getElementById('deleteModal').style.display = 'block';
+                document.getElementById('confirmDelete').href = 'deletePet.php?id=' + petId;
 
-    document.getElementById('deleteModal').style.display = 'block';
-    document.getElementById('confirmDelete').href = 'deletePet.php?id=' + petId;
+            }
 
-}
+            function closeDeleteModal() {
 
-function closeDeleteModal() {
+                document.getElementById('deleteModal').style.display = 'none';
 
-    document.getElementById('deleteModal').style.display = 'none';
+            }
+        </script>
 
-}
-
-</script>
-
-<?php 
-}
-?>
+    <?php
+    }
+    ?>
 
 
->>>>>>> 1e7ff2256c317eb1e18f01eb1ab0dab82d699111
 </body>
 
 <?php include("footer.php"); ?>

@@ -150,7 +150,7 @@ if (isset($_SESSION['id'])) {
 
                 <?php
                 // Show adopt button only for regular logged-in users
-                if ($user_role === 'user') {
+                if ($user_role !== 'admin') {
                     if ($pet['status'] == 'available') {
                         echo '<a href="adoptionRequest.php?pet_id=' . sanitize_int($pet['id']) . '" class="btn-adopt-pet">
                                 <i class="fas fa-heart"></i> Adopt ' . e($pet['name']) . '
@@ -162,7 +162,6 @@ if (isset($_SESSION['id'])) {
                     }
                 }
 
-                // Show login prompt only for guests (not logged in)
                 if ($user_role === null) {
                     echo '<a href="login.php" class="btn-adopt-pet">
                             <i class="fas fa-heart"></i> Login to Adopt ' . e($pet['name']) . '
@@ -199,7 +198,6 @@ if (isset($_SESSION['id'])) {
 
     </div>
 
-<<<<<<< HEAD
     <script>
         function openDeleteModal(petId) {
             document.getElementById("deleteModal").style.display = "block";

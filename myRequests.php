@@ -33,15 +33,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $u
     }
 
     if (empty($error_message)) {
-        $stmt = $con->prepare("UPDATE adoption_requests SET status = ?, remarks = ? WHERE request_id = ?");
-        $stmt->bind_param("ssi", $new_status, $remarks, $request_id);
+        $con->begin_transaction();
 
-        if ($stmt->execute()) {
+        try {
+
+            /* UPDATE CURRENT REQUEST */
+            $stmt = $con->prepare("UPDATE adoption_requests 
+                           SET status = ?, remarks = ? 
+                           WHERE request_id = ?");
+            $stmt->bind_param("ssi", $new_status, $remarks, $request_id);
+            $stmt->execute();
+            $stmt->close();
+
+
+            /* IF APPROVED -> UPDATE PET + REJECT OTHERS */
+            if ($new_status == 'approved') {
+
+                /* GET PET ID OF REQUEST */
+                $stmt = $con->prepare("SELECT pet_id FROM adoption_requests WHERE request_id = ?");
+                $stmt->bind_param("i", $request_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $row = $result->fetch_assoc();
+                $pet_id = $row['pet_id'];
+                $stmt->close();
+
+
+                /* UPDATE PET STATUS */
+                $stmt = $con->prepare("UPDATE pets SET status = 'adopted' WHERE id = ?");
+                $stmt->bind_param("i", $pet_id);
+                $stmt->execute();
+                $stmt->close();
+
+
+                /* REJECT OTHER REQUESTS */
+                $stmt = $con->prepare("UPDATE adoption_requests 
+                               SET status = 'rejected' 
+                               WHERE pet_id = ? 
+                               AND request_id != ?");
+                $stmt->bind_param("ii", $pet_id, $request_id);
+                $stmt->execute();
+                $stmt->close();
+            }
+
+            $con->commit();
             $success_message = "Request status updated successfully!";
-        } else {
-            $error_message = "Error updating status: " . $stmt->error;
+        } catch (Exception $e) {
+
+            $con->rollback();
+            $error_message = "Error updating request: " . $e->getMessage();
         }
-        $stmt->close();
     }
 }
 
@@ -74,11 +115,13 @@ $requests_result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>My Adoption Requests | PetAdopt</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
     <div class="requests-wrapper">
         <div class="requests-container">
@@ -276,4 +319,5 @@ $requests_result = $stmt->get_result();
     ?>
 </body>
 <?php include("footer.php"); ?>
+
 </html>

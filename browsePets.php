@@ -17,14 +17,12 @@ $sql     = "SELECT * FROM pets WHERE status = ?";
 $params[] = $status;
 $types   .= "s";
 
-// If admin, only show their pets
 if (isset($user_role) && $user_role === 'admin') {
     $sql .= " AND admin_id = ?";
     $params[] = $user_id;
     $types .= "i";
 }
 
-// Filter by category if selected
 if (isset($_GET['category']) && !empty($_GET['category'])) {
     $category = sanitize_string($_GET['category']);
     $sql .= " AND category = ?";
@@ -32,10 +30,8 @@ if (isset($_GET['category']) && !empty($_GET['category'])) {
     $types .= "s";
 }
 
-// Prepare and bind dynamically
 $stmt = $con->prepare($sql);
 
-// Dynamically bind parameters
 $stmt->bind_param($types, ...$params);
 
 $stmt->execute();
@@ -113,7 +109,6 @@ if (isset($_POST['add_category'])) {
                     <option value="">All</option>
 
                     <?php
-                    // Get ENUM values from pets.category column
                     $result = $con->query("SHOW COLUMNS FROM pets LIKE 'category'");
                     $row = $result->fetch_assoc();
 

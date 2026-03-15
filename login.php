@@ -8,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email    = $_POST["email"];
     $password = $_POST["password"];
 
-    // Store only email in session (never password)
     $_SESSION['form_data'] = [
         'email' => $email
     ];

@@ -83,22 +83,18 @@ $stmt->close();
 </head>
 <body>
 
-    <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <!-- Header -->
         <div class="panel-header">
             <h1><i class="fas fa-shield-alt"></i> Super Admin Panel</h1>
             <p>Manage users, assign roles, and oversee the pet adoption system</p>
         </div>
 
-        <!-- Alert Messages -->
         <?php if (!empty($message)): ?>
             <div class="alert alert-<?php echo $messageType; ?>">
                 <?php echo htmlspecialchars($message); ?>
             </div>
         <?php endif; ?>
 
-        <!-- Statistics Cards -->
         <div class="stats-container">
             <div class="stat-card">
                 <i class="fas fa-users"></i>
@@ -122,13 +118,11 @@ $stmt->close();
             </div>
         </div>
 
-        <!-- User Management Section -->
         <div class="management-section">
             <div class="section-header">
                 <h2><i class="fas fa-users-cog"></i> User Management</h2>
             </div>
 
-            <!-- Filter -->
             <form method="GET" action="adminpanel.php" class="filter-search-container">
                 <div class="filter-box">
                     <select name="role" onchange="this.form.submit()">
@@ -139,7 +133,6 @@ $stmt->close();
                 </div>
             </form>
 
-            <!-- User Table -->
             <div class="user-table-container">
                 <?php if (count($users) > 0): ?>
                     <table class="user-table">
@@ -195,7 +188,6 @@ $stmt->close();
         </div>
     </div>
 
-    <!-- Modal for Role Change Confirmation -->
     <div id="roleModal" class="modal">
         <div class="modal-content">
             <h3><i class="fas fa-exclamation-triangle"></i> Confirm Action</h3>
@@ -212,7 +204,6 @@ $stmt->close();
     </div>
 
     <script>
-        // Modal functions
         function openModal(userId, action, userName) {
             const modal = document.getElementById('roleModal');
             const message = document.getElementById('modalMessage');
@@ -235,14 +226,7 @@ $stmt->close();
             document.getElementById('roleModal').classList.remove('active');
         }
 
-        // Close modal on outside click
-        // document.getElementById('roleModal').addEventListener('click', function(e) {
-        //     if (e.target === this) {
-        //         closeModal();
-        //     }
-        // });
-
-        // Auto-hide alert messages after 5 seconds
+        
         setTimeout(function() {
             const alert = document.querySelector('.alert');
             if (alert) {

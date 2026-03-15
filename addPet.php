@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image_tmp     = $_FILES['image']['tmp_name'];
     $upload_folder = "assets/images/";
 
-    // Store form data in session so fields repopulate on error
     $_SESSION['form_data'] = [
         'name'        => $name,
         'age'         => $age,
@@ -123,7 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Pick up messages and form data from session then clear them
 $message = "";
 if (!empty($_SESSION['success_message'])) {
     $message = "<div class='message success_message'>" . e($_SESSION['success_message']) . "</div>";

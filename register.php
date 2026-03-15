@@ -91,14 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     }
 }
 
-// Pick up error and form data from session then clear them
 $error_message = "";
 if (!empty($_SESSION['error_message'])) {
     $error_message = $_SESSION['error_message'];
     unset($_SESSION['error_message']);
 }
 
-// Keep form_data in session until user submits again or succeeds
 $form_data = $_SESSION['form_data'] ?? [];
 ?>
 <!DOCTYPE html>

@@ -11,7 +11,6 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $pet_id = sanitize_int($_GET['id']);
 
-/* FETCH PET + SHELTER DETAILS */
 $stmt = $con->prepare("
     SELECT pets.*, users.full_name, users.email, users.phone_num
     FROM pets
@@ -149,7 +148,6 @@ if (isset($_SESSION['id'])) {
             <div class="pet-actions">
 
                 <?php
-                // Show adopt button only for regular logged-in users
                 if ($user_role !== 'admin') {
                     if ($pet['status'] == 'available') {
                         echo '<a href="adoptionRequest.php?pet_id=' . sanitize_int($pet['id']) . '" class="btn-adopt-pet">

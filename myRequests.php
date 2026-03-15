@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $u
 
         try {
 
-            /* UPDATE CURRENT REQUEST */
             $stmt = $con->prepare("UPDATE adoption_requests 
                            SET status = ?, remarks = ? 
                            WHERE request_id = ?");
@@ -46,10 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $u
             $stmt->close();
 
 
-            /* IF APPROVED -> UPDATE PET + REJECT OTHERS */
             if ($new_status == 'approved') {
 
-                /* GET PET ID OF REQUEST */
                 $stmt = $con->prepare("SELECT pet_id FROM adoption_requests WHERE request_id = ?");
                 $stmt->bind_param("i", $request_id);
                 $stmt->execute();
@@ -59,14 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $u
                 $stmt->close();
 
 
-                /* UPDATE PET STATUS */
                 $stmt = $con->prepare("UPDATE pets SET status = 'adopted' WHERE id = ?");
                 $stmt->bind_param("i", $pet_id);
                 $stmt->execute();
                 $stmt->close();
 
 
-                /* REJECT OTHER REQUESTS */
                 $stmt = $con->prepare("UPDATE adoption_requests 
                                SET status = 'rejected' 
                                WHERE pet_id = ? 
@@ -87,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status']) && $u
 }
 
 if ($user_role == 'admin') {
-    // Admin only sees requests for pets they added
     $stmt = $con->prepare("SELECT ar.*, 
                                   p.name as pet_name, p.breed, p.image, p.category,
                                   u.full_name as user_name, 
